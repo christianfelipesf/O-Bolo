@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://r1gd72k4d51r"]
+
+[ext_resource type="Script" uid="uid://dk8dsxeap8r0s" path="res://Scene/final.gd" id="1_bvven"]
+[ext_resource type="AudioStream" uid="uid://biql5n2vwxexq" path="res://Sound/birthday-145689.mp3" id="2_ka3wm"]
+[ext_resource type="PackedScene" uid="uid://5ocgbdw0tyba" path="res://3d/bolo.glb" id="3_2q3gj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y3js3"]
+metallic_specular = 0.66
+emission = Color(0.65834, 0.65834, 0.6583398, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_bvven"]
+material = SubResource("StandardMaterial3D_y3js3")
+text = "CRIADO POR CHRISTIAN"
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2q3gj"]
+sky_top_color = Color(0, 0.22597948, 0.41979745, 1)
+sky_horizon_color = Color(0.1695765, 0.25195932, 0.49472874, 1)
+sky_curve = 0.3958515
+ground_bottom_color = Color(0.3100109, 0.26586756, 0.2162421, 1)
+ground_horizon_color = Color(0.16862746, 0.2509804, 0.49411765, 1)
+ground_curve = 1.3718706
+
+[sub_resource type="Sky" id="Sky_8s6hl"]
+sky_material = SubResource("ProceduralSkyMaterial_2q3gj")
+
+[sub_resource type="Environment" id="Environment_1fop1"]
+background_mode = 2
+sky = SubResource("Sky_8s6hl")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9785975)
+mesh = SubResource("TextMesh_bvven")
+script = ExtResource("1_bvven")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_ka3wm")
+autoplay = true
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+
+[node name="bolo" parent="." instance=ExtResource("3_2q3gj")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.20369878, -0.4403882)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.72905225, 0.684458, 0, -0.684458, 0.72905225, 0, 0.77903533, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1fop1")

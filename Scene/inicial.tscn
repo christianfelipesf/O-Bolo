@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://derx4e5cbx4r2"]
+
+[ext_resource type="Texture2D" uid="uid://c50p5vbvox8os" path="res://Scene/barrril.png" id="1_5xvy8"]
+[ext_resource type="Script" uid="uid://b4ms68dg0u65h" path="res://Scene/inicial.gd" id="1_uwk3g"]
+[ext_resource type="Script" uid="uid://dqxqt0owsob1" path="res://Images/mudadecor.gd" id="2_8bcml"]
+
+[sub_resource type="Gradient" id="Gradient_uwk3g"]
+colors = PackedColorArray(0.31801978, 0.3180198, 0.31801963, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8bcml"]
+gradient = SubResource("Gradient_uwk3g")
+
+[node name="inicial" type="Node2D"]
+script = ExtResource("1_uwk3g")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(579, 320)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_8bcml")
+
+[node name="Sprite2D" type="Sprite2D" parent="Control"]
+position = Vector2(579.5, 332.25)
+scale = Vector2(4.6367188, 665.5)
+texture = SubResource("GradientTexture1D_8bcml")
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 309.0
+offset_top = 436.0
+offset_right = 857.0
+offset_bottom = 501.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 46
+text = "BARRIL GAMES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Barrril" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(587, 264)
+scale = Vector2(9.34375, 10.046873)
+texture = ExtResource("1_5xvy8")
