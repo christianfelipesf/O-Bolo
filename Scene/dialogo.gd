@@ -16,6 +16,8 @@ var esta_digitando: bool = false
 # --- Configurações de Interação ---
 @export var interacao_distancia: float = 45.0
 @export var velocidade_digitacao: float = 0.05 # Tempo entre letras
+@export var tempo_transicao: float = 0.5 # Tempo para escurecer/clarear
+@export var tempo_espera_escuro: float = 1.0 # Tempo que fica tudo preto após teleportar
 
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var audio_player = $audio
@@ -24,6 +26,13 @@ var esta_digitando: bool = false
 @onready var ui_canvas = get_tree().root.find_child("CanvasLayer", true, false)
 @onready var ui_control = ui_canvas.get_node("Control")
 @onready var ui_texto = ui_canvas.get_node("Control/Panel/RichTextLabel")
+@onready var ui_transicao = ui_canvas.get_node("Transicao") # Referência ao nó de transição
+
+func _ready() -> void:
+	# Garante que a transição comece invisível
+	if ui_transicao:
+		ui_transicao.modulate.a = 0
+		ui_transicao.visible = false
 
 func _process(_delta: float) -> void:
 	if player:
@@ -35,7 +44,6 @@ func _process(_delta: float) -> void:
 				exibir_proxima_fala()
 			
 			if Input.is_action_just_pressed("interagir") and dialogo_ativo:
-				# Se apertar F enquanto digita, mostra o texto todo
 				if esta_digitando:
 					finalizar_digitacao_imediato()
 				else:
@@ -52,16 +60,38 @@ func gerenciar_dialogo():
 		encerrar_dialogo()
 		pode_auto_ativar = false 
 		
-		# Inicia a sequência de teletransporte
-		await get_tree().create_timer(0.1).timeout # Delay de 1 segundo
+		# Inicia a sequência de teletransporte com efeito visual
+		executar_teletransporte_com_fade()
+
+func executar_teletransporte_com_fade():
+	if not ui_transicao or not player:
 		teleportar_player()
+		return
+
+	# 1. Torna o nó de transição visível e escurece a tela rapidamente
+	ui_transicao.visible = true
+	var tween = create_tween()
+	
+	# Interpola para totalmente escuro
+	await tween.tween_property(ui_transicao, "modulate:a", 1.0, tempo_transicao).finished
+	
+	# 2. Teleporta o player enquanto a tela está 100% preta
+	teleportar_player()
+	
+	# 3. Espera 1 segundo com a tela preta (atendendo ao pedido)
+	await get_tree().create_timer(tempo_espera_escuro).timeout
+	
+	# 4. Clareia a tela novamente
+	var tween_out = create_tween()
+	await tween_out.tween_property(ui_transicao, "modulate:a", 0.0, tempo_transicao).finished
+	
+	# 5. Esconde o nó de transição (fica invisível/desativado)
+	ui_transicao.visible = false
 
 func teleportar_player():
 	if player:
-		# Define a nova posição
 		var nova_posicao = Vector2(180, -88)
 		
-		# Se o seu Player for um CharacterBody2D, é boa prática zerar a velocidade
 		if "velocity" in player:
 			player.velocity = Vector2.ZERO
 			
@@ -79,13 +109,11 @@ func exibir_proxima_fala():
 	
 	indice_fala += 1
 	
-	# Loop de digitação manual para garantir o áudio e reset correto
 	for i in range(texto_completo.length() + 1):
-		if not esta_digitando or not dialogo_ativo: break # Interrompe se pular ou fechar
+		if not esta_digitando or not dialogo_ativo: break
 		
 		ui_texto.visible_characters = i
 		
-		# Toca o áudio a cada caractere (exceto espaços)
 		if i > 0 and texto_completo[i-1] != " ":
 			audio_player.pitch_scale = randf_range(0.9, 1.1)
 			audio_player.play()
@@ -95,15 +123,14 @@ func exibir_proxima_fala():
 	esta_digitando = false
 
 func finalizar_digitacao_imediato():
-	esta_digitando = false # Para o loop do 'for'
-	ui_texto.visible_characters = -1 # Mostra tudo
+	esta_digitando = false 
+	ui_texto.visible_characters = -1 
 
 func encerrar_dialogo():
-	if ui_texto.text in falas_objeto:
-		ui_control.visible = false
-		dialogo_ativo = false
-		esta_digitando = false
-		indice_fala = 0
+	ui_control.visible = false
+	dialogo_ativo = false
+	esta_digitando = false
+	indice_fala = 0
 
 func _player_esta_olhando() -> bool:
 	if not player or not player.has_node("AnimatedSprite2D"): return false

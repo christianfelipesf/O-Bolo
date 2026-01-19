@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=4 uid="uid://bv7bx61hb70fc"]
+[gd_scene load_steps=64 format=4 uid="uid://bv7bx61hb70fc"]
 
 [ext_resource type="Texture2D" uid="uid://du64pw051mocm" path="res://Images/Tilemap/InteriorTilesLITE.png" id="1_pd30k"]
 [ext_resource type="Texture2D" uid="uid://br2gppi5hd5tx" path="res://Images/principal.png" id="2_4y6b0"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://d7sf7ajg83ca" path="res://Images/button/sprite_3.png" id="17_5ok1v"]
 [ext_resource type="Texture2D" uid="uid://bn0eqeqcr8yen" path="res://Images/button/sprite_4.png" id="18_gg2qv"]
 [ext_resource type="Texture2D" uid="uid://dx06lhjptgoj2" path="res://Images/button/sprite_5.png" id="19_dkqf1"]
+[ext_resource type="Shader" uid="uid://tjm6fjhggewv" path="res://Scene/shadertempestade.gdshader" id="20_5ok1v"]
 
 [sub_resource type="Gradient" id="Gradient_negto"]
 colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
@@ -1044,53 +1045,60 @@ gravity = Vector3(0, -90, 0)
 radius = 13.500702
 height = 83.00427
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_rx0yy"]
-blend_mode = 2
+[sub_resource type="CircleShape2D" id="CircleShape2D_ft0ry"]
 
-[sub_resource type="Gradient" id="Gradient_2ukx5"]
-offsets = PackedFloat32Array(1)
-colors = PackedColorArray(0.54896235, 0.54896265, 0.5489625, 1)
+[sub_resource type="Gradient" id="Gradient_ulwjq"]
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_syw5o"]
-gradient = SubResource("Gradient_2ukx5")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5ok1v"]
+gradient = SubResource("Gradient_ulwjq")
 
-[sub_resource type="GDScript" id="GDScript_rx0yy"]
-resource_name = "chuva"
-script/source = "extends Sprite2D
+[sub_resource type="GDScript" id="GDScript_ulwjq"]
+resource_name = "tirar_stum"
+script/source = "extends Area2D
 
-@export var opacidade_ceu_escuro: float = 1.0    # Quase invisível
-@export var opacidade_raio: float = 0.0          # Clarão total
-@export var velocidade_fade: float = 8.0         # Velocidade com que o rastro do raio some
+# Variável para garantir que o código só execute uma vez
+var ja_foi_ativado: bool = false
 
-var tempo_para_proximo_raio: float = 2.0
+func _physics_process(_delta: float) -> void:
+	if ja_foi_ativado:
+		return
 
-func _ready() -> void:
-	modulate.a = opacidade_ceu_escuro
+	var corpos = get_overlapping_bodies()
+	for corpo in corpos:
+		if corpo.is_in_group(\"player\"):
+			ativar_evento(corpo)
+			break # Sai do loop assim que achar o player
 
-func _process(delta: float) -> void:
-	# 1. Faz a opacidade sempre voltar para o estado escuro suavemente
-	modulate.a = lerp(modulate.a, opacidade_ceu_escuro, velocidade_fade * delta)
+func ativar_evento(player_node: Node2D) -> void:
+	ja_foi_ativado = true
 	
-	# 2. Controle do tempo para o próximo disparo
-	tempo_para_proximo_raio -= delta
+	print(\"Player detectado no destino! Desativando área...\")
 	
-	if tempo_para_proximo_raio <= 0:
-		disparar_raio()
-
-func disparar_raio() -> void:
-	# 3. Dá o clarão instantâneo
-	modulate.a = opacidade_raio
+	# 1. Destrava o player
+	if player_node.has_method(\"set_frozen\"):
+		player_node.set_frozen(false)
 	
-	# 4. Define um tempo aleatório para o próximo (ex: entre 3 e 8 segundos)
-	tempo_para_proximo_raio = randf_range(3.0, 8.0)
+	# 2. Desativa a detecção física da área para economizar processamento
+	set_deferred(\"monitoring\", false)
+	set_deferred(\"monitorable\", false)
 	
-	# Opcional: Pequeno \"double-flash\" comum em relâmpagos
-	if randf() > 0.6:
-		await get_tree().create_timer(0.1).timeout
-		modulate.a = opacidade_raio
+	# 3. Opcional: Remove a área da cena se não for mais usá-la
+	# queue_free()
 "
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ft0ry"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ok1v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5ok1v"]
+shader = ExtResource("20_5ok1v")
+shader_parameter/color_cloud = Color(0.1, 0.1, 0.1, 1)
+shader_parameter/speed = 0.5
+shader_parameter/density = 0.8
+shader_parameter/softness = 1.0
+
+[sub_resource type="Gradient" id="Gradient_gg2qv"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dkqf1"]
+gradient = SubResource("Gradient_gg2qv")
 
 [node name="Mundoaberto" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [-298.0, -295.0, -237.0]
@@ -1203,13 +1211,6 @@ position = Vector2(193.5, 295.5)
 rotation = -1.5693444
 shape = SubResource("CapsuleShape2D_rx0yy")
 
-[node name="Escuro" type="Sprite2D" parent="."]
-material = SubResource("CanvasItemMaterial_rx0yy")
-position = Vector2(-416.5, -58.875004)
-scale = Vector2(0.97265613, 253.74998)
-texture = SubResource("GradientTexture1D_syw5o")
-script = SubResource("GDScript_rx0yy")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -1281,9 +1282,30 @@ texture_pressed = ExtResource("16_u73q2")
 shape = SubResource("CircleShape2D_ft0ry")
 action = "ui_right"
 
+[node name="Transicao" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(627, 296)
+scale = Vector2(-5.066669, -796.3798)
+texture = SubResource("GradientTexture1D_5ok1v")
+
 [node name="Dialogo" type="Sprite2D" parent="."]
 position = Vector2(-413, -51)
 script = ExtResource("13_2ukx5")
 
 [node name="audio" type="AudioStreamPlayer2D" parent="Dialogo"]
 stream = ExtResource("14_syw5o")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(180, -84)
+script = SubResource("GDScript_ulwjq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(2.48, 2.24)
+shape = SubResource("CircleShape2D_5ok1v")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_5ok1v")
+position = Vector2(-430.00003, -70)
+scale = Vector2(2.0734625, -326.2029)
+texture = SubResource("GradientTexture1D_dkqf1")
+
+[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]

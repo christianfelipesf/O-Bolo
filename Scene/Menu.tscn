@@ -1,6 +1,194 @@
-[gd_scene load_steps=2 format=3 uid="uid://drra3lx7cuu43"]
+[gd_scene load_steps=9 format=3 uid="uid://drra3lx7cuu43"]
 
 [ext_resource type="Script" uid="uid://dhk4xfpjryuw" path="res://Scene/startbutton.gd" id="1_dvvdh"]
+[ext_resource type="Texture2D" uid="uid://bkpmbxw2cnho2" path="res://icon.svg" id="1_mcucm"]
+[ext_resource type="Texture2D" uid="uid://slyys6k6xt3k" path="res://Images/esfera.png" id="2_ldxh0"]
+
+[sub_resource type="Shader" id="Shader_cenux"]
+code = "shader_type canvas_item;
+
+// Cores ajustadas para serem menos escuras, mas ainda climáticas
+uniform vec4 cor_ceu : source_color = vec4(0.05, 0.1, 0.2, 1.0);
+uniform vec4 cor_nuvem : source_color = vec4(0.3, 0.3, 0.35, 1.0);
+uniform vec4 cor_raio : source_color = vec4(0.9, 0.95, 1.0, 1.0);
+
+uniform float velocidade : hint_range(0.0, 2.0) = 0.08;
+uniform float densidade : hint_range(0.0, 2.0) = 0.45;
+
+float rand(vec2 uv) {
+    return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float noise(vec2 uv) {
+    vec2 i = floor(uv);
+    vec2 f = fract(uv);
+    float a = rand(i);
+    float b = rand(i + vec2(1.0, 0.0));
+    float c = rand(i + vec2(0.0, 1.0));
+    float d = rand(i + vec2(1.0, 1.0));
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+float fbm(vec2 uv) {
+    float valor = 0.0;
+    float amplitude = 0.5;
+    for (int i = 0; i < 7; i++) {
+        valor += amplitude * noise(uv);
+        uv *= 2.15;
+        amplitude *= 0.5;
+    }
+    return valor;
+}
+
+void fragment() {
+    // Distorção orgânica para movimento flúido
+    vec2 uv_distorcido = UV * 3.0;
+    uv_distorcido += fbm(uv_distorcido * 0.4 + TIME * 0.04) * 0.25;
+
+    vec2 movimento = vec2(TIME * velocidade, TIME * velocidade * 0.15);
+    float n = fbm(uv_distorcido + movimento);
+
+    // Suavização da nuvem com mais contraste
+    float nuvem_final = smoothstep(densidade, densidade + 0.45, n);
+
+    // Lógica de Raios Intensificada
+    // Aumentamos a velocidade do tempo do raio para checagens mais rápidas
+    float tempo_raio = TIME * 1.5;
+
+    // Criamos dois triggers diferentes para raios duplos ou mais frequentes
+    float trigger1 = step(0.96, fract(sin(floor(tempo_raio) * 532.12)));
+    float trigger2 = step(0.98, fract(sin(floor(tempo_raio * 0.5) * 891.32)));
+    float flash_trigger = clamp(trigger1 + trigger2, 0.0, 1.0);
+
+    // Decaimento do flash: brilha e desvanece de forma orgânica
+    float flash_intensidade = flash_trigger * pow(1.0 - fract(tempo_raio), 2.5) * 2.5;
+
+    // Mistura das cores base
+    vec4 cor_base = mix(cor_ceu, cor_nuvem, nuvem_final);
+
+    // O raio ilumina as nuvens intensamente
+    vec4 final_color = mix(cor_base, cor_raio, flash_intensidade * nuvem_final * 0.9);
+
+    // Brilho atmosférico global durante o raio
+    final_color += cor_raio * flash_intensidade * 0.4;
+
+    COLOR = vec4(final_color.rgb, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jt11a"]
+shader = SubResource("Shader_cenux")
+shader_parameter/cor_ceu = Color(0.3, 0.5, 0.9, 1)
+shader_parameter/cor_nuvem = Color(1, 1, 1, 1)
+shader_parameter/cor_raio = Color(1, 0.9, 0.7, 1)
+shader_parameter/velocidade = 0.1
+shader_parameter/densidade = 0.5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ldxh0"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ldxh0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ldxh0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="GDScript" id="GDScript_cenux"]
+resource_name = "seguir"
+script/source = "extends AnimatedSprite2D
+
+@export var velocidade_max: float = 300.0
+@export var aceleracao: float = 800.0
+@export var friccao: float = 400.0  # Faz ele deslizar um pouco ao parar
+@export var suavidade_curva: float = 0.15 # Quanto menor, mais \"pesada\" é a curva
+
+var velocidade_atual: Vector2 = Vector2.ZERO
+var alvo: CanvasItem = null
+
+var limite_min: Vector2
+var limite_max: Vector2
+
+func _ready() -> void:
+	await get_tree().process_frame
+	atualizar_limites()
+	invocar_bolinha()
+
+func _process(delta: float) -> void:
+	if alvo != null:
+		# 1. Direção desejada (onde ele quer ir)
+		var direcao_desejada = global_position.direction_to(alvo.global_position)
+		
+		# 2. Movimento Orgânico: Interpolação da velocidade
+		# Isso faz com que ele não mude de direção instantaneamente
+		var velocidade_alvo = direcao_desejada * velocidade_max
+		velocidade_atual = velocidade_atual.lerp(velocidade_alvo, suavidade_curva)
+		
+		# 3. Aplicar o movimento
+		global_position += velocidade_atual * delta
+		
+		# 4. Inclinação orgânica (Efeito visual de velocidade)
+		# O sprite inclina um pouco para a direção que está correndo
+		rotation = lerp_angle(rotation, direcao_desejada.x * 0.2, 0.1)
+		
+		# 5. Flip do Sprite e Animação
+		flip_h = velocidade_atual.x < 0
+		if sprite_frames.has_animation(\"run\"):
+			play(\"run\")
+			speed_scale = velocidade_atual.length() / velocidade_max # Animação acelera com ele
+
+		# 6. Checagem de distância
+		if global_position.distance_to(alvo.global_position) < 20.0:
+			comer_bolinha()
+	else:
+		# Parar organicamente com fricção
+		velocidade_atual = velocidade_atual.move_toward(Vector2.ZERO, friccao * delta)
+		global_position += velocidade_atual * delta
+		rotation = lerp_angle(rotation, 0, 0.1)
+		
+		if sprite_frames.has_animation(\"idle\"):
+			play(\"idle\")
+
+func comer_bolinha():
+	# Pequeno efeito de escala ao comer (Opcional)
+	var tween = create_tween()
+	tween.tween_property(self, \"scale\", Vector2(3.2, 3.2), 0.1)
+	tween.tween_property(self, \"scale\", Vector2(3.0, 3.0), 0.1)
+	
+	alvo.queue_free()
+	alvo = null
+	invocar_bolinha()
+
+func atualizar_limites():
+	var painel = get_parent() as Control
+	if painel:
+		limite_min = painel.global_position
+		limite_max = painel.global_position + painel.size
+
+func invocar_bolinha():
+	var nova_bolinha = ColorRect.new()
+	nova_bolinha.size = Vector2(12, 12)
+	nova_bolinha.color = Color.AZURE
+	get_parent().add_child(nova_bolinha)
+	
+	nova_bolinha.pivot_offset = nova_bolinha.size / 2
+	
+	# Posição aleatória
+	var margem = 40.0
+	var pos_x = randf_range(limite_min.x + margem, limite_max.x - margem)
+	var pos_y = randf_range(limite_min.y + margem, limite_max.y - margem)
+	nova_bolinha.global_position = Vector2(pos_x, pos_y)
+	
+	# Efeito de \"surgimento\" da bolinha
+	nova_bolinha.scale = Vector2.ZERO
+	var tween = create_tween()
+	tween.tween_property(nova_bolinha, \"scale\", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	
+	alvo = nova_bolinha
+"
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -10,12 +198,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_jt11a")
+position = Vector2(587.5, 292)
+scale = Vector2(10.1796875, 5.5625)
+texture = ExtResource("1_mcucm")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -29.0
+offset_bottom = -29.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_ldxh0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Panel"]
+texture_filter = 1
+position = Vector2(571, 290)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_ldxh0")
+script = SubResource("GDScript_cenux")
+
+[node name="Button" type="Button" parent="Panel"]
 layout_mode = 0
-offset_left = 433.0
-offset_top = 290.0
-offset_right = 703.0
-offset_bottom = 404.0
+offset_left = 379.0
+offset_top = 236.0
+offset_right = 749.0
+offset_bottom = 350.0
 theme_override_font_sizes/font_size = 48
-text = "START"
+text = "(F) PROSSEGUIR"
 script = ExtResource("1_dvvdh")
