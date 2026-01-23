@@ -1,0 +1,151 @@
+[gd_scene load_steps=18 format=3 uid="uid://bklpqqdij2sg1"]
+
+[ext_resource type="Script" uid="uid://yfuy2v5b4fo0" path="res://Scene/principal.gd" id="1_5iwuv"]
+[ext_resource type="Texture2D" uid="uid://br2gppi5hd5tx" path="res://Images/principal.png" id="2_pxguf"]
+[ext_resource type="Texture2D" uid="uid://caeirrqqh5yky" path="res://Images/Aseprite/light.png" id="3_mxy6q"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d1wwv"]
+radius = 7.0
+height = 14.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rx0yy"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ukx5"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syw5o"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7th6"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swde6"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ft0ry"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u73q2"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfolt"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwgxh"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulwjq"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ok1v"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gg2qv"]
+atlas = ExtResource("2_pxguf")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_820al"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rx0yy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ukx5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syw5o")
+}],
+"loop": true,
+"name": &"baixo",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s7th6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swde6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ft0ry")
+}],
+"loop": true,
+"name": &"cima",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u73q2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfolt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwgxh")
+}],
+"loop": true,
+"name": &"direita",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ulwjq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ok1v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gg2qv")
+}],
+"loop": true,
+"name": &"esquerda",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+position = Vector2(63, 77)
+collision_layer = 5
+script = ExtResource("1_5iwuv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 11)
+shape = SubResource("CapsuleShape2D_d1wwv")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(10, 10)
+zoom = Vector2(2.5, 2.5)
+position_smoothing_enabled = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_820al")
+animation = &"baixo"
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(1, 37)
+scale = Vector2(1.4875503, 0.6922294)
+texture = ExtResource("3_mxy6q")
+texture_scale = 1.49
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(1, 2)
+
+[node name="ColorRect" type="ColorRect" parent="Marker2D"]
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 45.0
+offset_bottom = 44.0

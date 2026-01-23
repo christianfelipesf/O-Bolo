@@ -1,0 +1,11 @@
+{
+    "worlds": {
+        "0": { "name": "White Space", "bg": "white", "VisuStellaSprite": "OMO_WS", "titleSprite": "OMO_TITLE_WS", "bulbSprite": "OMO_BULB_WS", "stringSprite": "OMO_STRING_WS", "bgm": "user_title" },
+        "444": { "name": "Black Space", "bg": "black", "VisuStellaSprite": "OMO_BS", "titleSprite": "OMO_TITLE_BS", "bulbSprite": "OMO_BULB_BS", "stringSprite": "OMO_STRING_BS", "bgm": "bs_listening" },
+        "445": { "name": "Red Space", "bg": "!parallax_black_space", "VisuStellaSprite": "OMO_RS", "titleSprite": "OMO_TITLE_BS", "bulbSprite": "OMO_BULB_BS", "stringSprite": "OMO_STRING_BS", "bgm": "bs_listening", "bgs": {"name": "amb_kettle", "volume": 90} },
+        "446": { "name": "White Space (Alt)", "bg": "white", "VisuStellaSprite": "OMO_WS", "titleSprite": "OMO_TITLE_WS", "bulbSprite": "OMO_BULB_WS", "stringSprite": "OMO_STRING_WS", "bgm": "user_title" },
+        "447": { "name": "Ending Good", "bg": "polaroidBG_FA_day", "VisuStellaSprite": "OMO_RS", "titleSprite": "OMO_TITLE_WS", "bulbSprite": "OMO_BULB_WS", "stringSprite": "OMO_STRING_WS", "bgm": "duet_mari", "bgs": {"name": "AMB_forest", "volume": 50} },
+        "448": { "name": "Ending Bad", "bg": "polaroidBG_FA_day", "VisuStellaSprite": null, "titleSprite": "OMO_TITLE_WS", "bulbSprite": "OMO_BULB_WS", "stringSprite": "OMO_STRING_WS", "bgm": "AMB_forest" },
+        "449": { "name": "Ending Good (Alt)", "bg": "polaroidBG_FA_day", "VisuStellaSprite": "OMO_RS", "titleSprite": "OMO_TITLE_WS", "bulbSprite": "OMO_BULB_WS", "stringSprite": "OMO_STRING_WS", "bgm": "duet_mari", "bgs": {"name": "AMB_forest", "volume": 50} }
+    }
+}

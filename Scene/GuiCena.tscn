@@ -1,0 +1,130 @@
+[gd_scene load_steps=12 format=3 uid="uid://bosidlf68empu"]
+
+[ext_resource type="Texture2D" uid="uid://dvm1g3apndy3m" path="res://Images/button/sprite_0.png" id="1_05f8p"]
+[ext_resource type="Texture2D" uid="uid://dsnj5lqjp5mp1" path="res://Images/button/sprite_1.png" id="2_1401v"]
+[ext_resource type="Texture2D" uid="uid://bh6os4umph08p" path="res://Images/button/sprite_2.png" id="3_y47j8"]
+[ext_resource type="Texture2D" uid="uid://d7sf7ajg83ca" path="res://Images/button/sprite_3.png" id="4_ru043"]
+[ext_resource type="Texture2D" uid="uid://bn0eqeqcr8yen" path="res://Images/button/sprite_4.png" id="5_wtu24"]
+[ext_resource type="Texture2D" uid="uid://dx06lhjptgoj2" path="res://Images/button/sprite_5.png" id="6_tux70"]
+[ext_resource type="Script" uid="uid://cig04sjamevjq" path="res://Scene/acessoriosgui.gd" id="7_wrxl7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_no5or"]
+
+[sub_resource type="Gradient" id="Gradient_i147e"]
+offsets = PackedFloat32Array(0.006666667, 1)
+colors = PackedColorArray(0.1662736, 0.5235182, 0.8866573, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xvafv"]
+noise_type = 0
+frequency = 0.0091
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bdvfa"]
+noise = SubResource("FastNoiseLite_xvafv")
+color_ramp = SubResource("Gradient_i147e")
+normalize = false
+
+[node name="Gui" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 282.0
+offset_top = 370.0
+offset_right = 878.0
+offset_bottom = 569.0
+metadata/_edit_lock_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/Panel"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 17.0
+offset_right = 575.0
+offset_bottom = 188.0
+theme_override_font_sizes/normal_font_size = 22
+text = "VERIFICANDO"
+metadata/_edit_lock_ = true
+
+[node name="Play" type="TouchScreenButton" parent="CanvasLayer"]
+texture_filter = 1
+position = Vector2(983, 285)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("1_05f8p")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "interagir"
+
+[node name="CIMA" type="TouchScreenButton" parent="CanvasLayer"]
+texture_filter = 1
+position = Vector2(86, 312)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("3_y47j8")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "ui_up"
+
+[node name="ESQ" type="TouchScreenButton" parent="CanvasLayer"]
+texture_filter = 1
+position = Vector2(15, 399)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("4_ru043")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "ui_left"
+
+[node name="BAIXO" type="TouchScreenButton" parent="CanvasLayer"]
+texture_filter = 1
+position = Vector2(85, 485)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("5_wtu24")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "ui_down"
+
+[node name="DIR" type="TouchScreenButton" parent="CanvasLayer"]
+texture_filter = 1
+position = Vector2(155, 403)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("6_tux70")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "ui_right"
+
+[node name="Transicao" type="Sprite2D" parent="CanvasLayer"]
+visible = false
+position = Vector2(528, 295.99997)
+scale = Vector2(2.46, 1.604)
+texture = SubResource("NoiseTexture2D_bdvfa")
+
+[node name="Acessorios" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_wrxl7")
+metadata/_edit_use_anchors_ = true
+
+[node name="Vida" type="ProgressBar" parent="CanvasLayer/Acessorios"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 12.0
+offset_right = 194.0
+offset_bottom = 39.0
+max_value = 3.0
+step = 1.0
+metadata/_edit_use_anchors_ = true
