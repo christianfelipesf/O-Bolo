@@ -14,6 +14,7 @@ config/name="O bolo"
 config/description="Comer o bolo?"
 run/main_scene="uid://derx4e5cbx4r2"
 config/features=PackedStringArray("4.5", "GL Compatibility")
+boot_splash/use_filter=false
 boot_splash/image="uid://7fclrg16lgyr"
 config/icon="uid://c2fx4yctfmxsh"
 
@@ -22,6 +23,7 @@ config/icon="uid://c2fx4yctfmxsh"
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="ignore"
+mouse_cursor/custom_image="uid://bgw03j8ya7xvx"
 
 [global_group]
 
@@ -51,6 +53,7 @@ pointing/emulate_touch_from_mouse=true
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 viewport/hdr_2d=true

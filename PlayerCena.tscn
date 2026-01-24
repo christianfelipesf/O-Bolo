@@ -1,8 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://bklpqqdij2sg1"]
+[gd_scene load_steps=17 format=3 uid="uid://bklpqqdij2sg1"]
 
 [ext_resource type="Script" uid="uid://yfuy2v5b4fo0" path="res://Scene/principal.gd" id="1_5iwuv"]
 [ext_resource type="Texture2D" uid="uid://br2gppi5hd5tx" path="res://Images/principal.png" id="2_pxguf"]
-[ext_resource type="Texture2D" uid="uid://caeirrqqh5yky" path="res://Images/Aseprite/light.png" id="3_mxy6q"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d1wwv"]
 radius = 7.0
@@ -133,19 +132,5 @@ position_smoothing_enabled = true
 sprite_frames = SubResource("SpriteFrames_820al")
 animation = &"baixo"
 
-[node name="PointLight2D" type="PointLight2D" parent="."]
-position = Vector2(1, 37)
-scale = Vector2(1.4875503, 0.6922294)
-texture = ExtResource("3_mxy6q")
-texture_scale = 1.49
-
-[node name="RayCast2D" type="RayCast2D" parent="."]
-
 [node name="Marker2D" type="Marker2D" parent="."]
 position = Vector2(1, 2)
-
-[node name="ColorRect" type="ColorRect" parent="Marker2D"]
-offset_left = 5.0
-offset_top = 4.0
-offset_right = 45.0
-offset_bottom = 44.0

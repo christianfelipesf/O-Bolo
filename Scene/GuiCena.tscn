@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bosidlf68empu"]
+[gd_scene load_steps=13 format=3 uid="uid://bosidlf68empu"]
 
 [ext_resource type="Texture2D" uid="uid://dvm1g3apndy3m" path="res://Images/button/sprite_0.png" id="1_05f8p"]
 [ext_resource type="Texture2D" uid="uid://dsnj5lqjp5mp1" path="res://Images/button/sprite_1.png" id="2_1401v"]
+[ext_resource type="Texture2D" uid="uid://casrv5faw53ok" path="res://Images/button/espadabutton.png" id="3_0xtiu"]
 [ext_resource type="Texture2D" uid="uid://bh6os4umph08p" path="res://Images/button/sprite_2.png" id="3_y47j8"]
 [ext_resource type="Texture2D" uid="uid://d7sf7ajg83ca" path="res://Images/button/sprite_3.png" id="4_ru043"]
 [ext_resource type="Texture2D" uid="uid://bn0eqeqcr8yen" path="res://Images/button/sprite_4.png" id="5_wtu24"]
@@ -23,17 +24,9 @@ noise = SubResource("FastNoiseLite_xvafv")
 color_ramp = SubResource("Gradient_i147e")
 normalize = false
 
-[node name="Gui" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="GuiCentral" type="CanvasLayer"]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Control" type="Control" parent="CanvasLayer"]
+[node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +35,7 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_lock_ = true
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
+[node name="Panel" type="Panel" parent="Control"]
 layout_mode = 0
 offset_left = 282.0
 offset_top = 370.0
@@ -50,17 +43,19 @@ offset_right = 878.0
 offset_bottom = 569.0
 metadata/_edit_lock_ = true
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/Panel"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/Panel"]
 layout_mode = 0
 offset_left = 21.0
 offset_top = 17.0
 offset_right = 575.0
 offset_bottom = 188.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 0)
 theme_override_font_sizes/normal_font_size = 22
-text = "VERIFICANDO"
+scroll_active = false
 metadata/_edit_lock_ = true
 
-[node name="Play" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="Play" type="TouchScreenButton" parent="."]
 texture_filter = 1
 position = Vector2(983, 285)
 scale = Vector2(4, 4)
@@ -69,7 +64,16 @@ texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "interagir"
 
-[node name="CIMA" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="Atacar" type="TouchScreenButton" parent="."]
+texture_filter = 1
+position = Vector2(911, 417)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("3_0xtiu")
+texture_pressed = ExtResource("2_1401v")
+shape = SubResource("CircleShape2D_no5or")
+action = "atacar"
+
+[node name="CIMA" type="TouchScreenButton" parent="."]
 texture_filter = 1
 position = Vector2(86, 312)
 scale = Vector2(4, 4)
@@ -78,7 +82,7 @@ texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "ui_up"
 
-[node name="ESQ" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="ESQ" type="TouchScreenButton" parent="."]
 texture_filter = 1
 position = Vector2(15, 399)
 scale = Vector2(4, 4)
@@ -87,7 +91,7 @@ texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "ui_left"
 
-[node name="BAIXO" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="BAIXO" type="TouchScreenButton" parent="."]
 texture_filter = 1
 position = Vector2(85, 485)
 scale = Vector2(4, 4)
@@ -96,7 +100,7 @@ texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "ui_down"
 
-[node name="DIR" type="TouchScreenButton" parent="CanvasLayer"]
+[node name="DIR" type="TouchScreenButton" parent="."]
 texture_filter = 1
 position = Vector2(155, 403)
 scale = Vector2(4, 4)
@@ -105,13 +109,13 @@ texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "ui_right"
 
-[node name="Transicao" type="Sprite2D" parent="CanvasLayer"]
+[node name="Transicao" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(528, 295.99997)
 scale = Vector2(2.46, 1.604)
 texture = SubResource("NoiseTexture2D_bdvfa")
 
-[node name="Acessorios" type="Control" parent="CanvasLayer"]
+[node name="Acessorios" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -119,12 +123,14 @@ offset_bottom = 40.0
 script = ExtResource("7_wrxl7")
 metadata/_edit_use_anchors_ = true
 
-[node name="Vida" type="ProgressBar" parent="CanvasLayer/Acessorios"]
+[node name="Vida" type="ProgressBar" parent="Acessorios"]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 12.0
 offset_right = 194.0
 offset_bottom = 39.0
+scale = Vector2(1.6814256, 1.7604053)
 max_value = 3.0
 step = 1.0
+value = 3.0
 metadata/_edit_use_anchors_ = true
