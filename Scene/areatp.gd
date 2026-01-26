@@ -4,6 +4,7 @@ extends Area2D
 @export var cooldown_seconds: float = 2.0
 @export var tempo_transicao: float = 0.5
 @export var tempo_espera_escuro: float = 1.0
+@onready var local = $Target.global_position
 
 var is_active: bool = true
 
@@ -70,7 +71,7 @@ func aplicar_movimento_teleporte(player: Node2D) -> void:
 		if "velocity" in player:
 			player.velocity = Vector2.ZERO
 			
-		player.global_position = target_pos_v2
-		print("Portal: Player teleportado para ", target_pos_v2)
+		player.global_position = local #target_pos_v2
+		print("Portal: Player teleportado para ", local)
 	else:
 		push_error("ERRO: O Area2D não possui o metadado 'pos' do tipo Vector3!")

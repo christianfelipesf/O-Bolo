@@ -7,9 +7,9 @@ var start_position: Vector2
 
 # --- Configurações de Debug ---
 @export_group("Debug Visual")
-@export var debug_view: bool = true
+@export var debug_view: bool = false
 @export var attack_range: float = 40.0
-@export var attack_radius: float = 20.0
+@export var attack_radius: float = 35.0
 @export var looking_at: Vector2 = Vector2.DOWN:
 	set(val):
 		looking_at = val

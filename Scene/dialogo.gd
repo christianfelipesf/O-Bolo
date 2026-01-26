@@ -39,7 +39,7 @@ func _process(_delta: float) -> void:
 		var distancia = global_position.distance_to(player.global_position)
 		var olhando = _player_esta_olhando()
 		
-		if distancia <= interacao_distancia and olhando:
+		if distancia <= interacao_distancia:
 			if not dialogo_ativo and pode_auto_ativar:
 				exibir_proxima_fala()
 			
