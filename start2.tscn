@@ -15,3 +15,4 @@ sky = SubResource("Sky_55pyl")
 environment = SubResource("Environment_3mc1r")
 
 [node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0034909248, 1.1920929e-07, 0.0068820715)

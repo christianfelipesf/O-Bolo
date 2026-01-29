@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://d348sm278dydd"
+
+[deps]
+
+files=["res://Images/Personagens/voador/credits/credits.notes.translation", "res://Images/Personagens/voador/credits/credits.authors.translation", "res://Images/Personagens/voador/credits/credits.licenses.translation", "res://Images/Personagens/voador/credits/credits.urls.translation"]
+
+source_file="res://Images/Personagens/voador/credits/credits.csv"
+dest_files=["res://Images/Personagens/voador/credits/credits.notes.translation", "res://Images/Personagens/voador/credits/credits.authors.translation", "res://Images/Personagens/voador/credits/credits.licenses.translation", "res://Images/Personagens/voador/credits/credits.urls.translation"]
+
+[params]
+
+compress=true
+delimiter=0

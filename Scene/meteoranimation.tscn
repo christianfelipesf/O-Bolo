@@ -1,0 +1,136 @@
+[gd_scene load_steps=15 format=3 uid="uid://ns5dtsgs5pc6"]
+
+[ext_resource type="Script" uid="uid://d0rhmue4wmq7q" path="res://Scripts/meteoranimation.gd" id="1_26is2"]
+[ext_resource type="Shader" uid="uid://ceoi1p1sh17dx" path="res://nightsky.gdshader" id="1_j3q2m"]
+[ext_resource type="Texture2D" uid="uid://bkpmbxw2cnho2" path="res://icon.svg" id="2_65xsj"]
+[ext_resource type="Shader" uid="uid://dediatnbylno7" path="res://Scene/chuva.gdshader" id="3_26is2"]
+[ext_resource type="Texture2D" uid="uid://cy8mcss6lxj31" path="res://Images/Void_EnvironmentPack/Asteroids/PNGs/Asteroid 01 - Base.png" id="3_icc84"]
+[ext_resource type="Texture2D" uid="uid://dfvtbn8eui1av" path="res://Images/Void_EnvironmentPack/Effects/PNGs/Asteroid - Flame.png" id="4_26is2"]
+[ext_resource type="FontFile" uid="uid://bajivabu2xdd8" path="res://Font/SpaceMono-Regular.ttf" id="5_65xsj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ml61a"]
+shader = ExtResource("1_j3q2m")
+shader_parameter/sky_color = Color(0.01, 0.02, 0.07, 1)
+shader_parameter/horizon_color = Color(0.05, 0.1, 0.25, 1)
+shader_parameter/star_density = 100.0
+shader_parameter/star_brightness_min = 0.5
+shader_parameter/star_brightness_max = 3.0
+shader_parameter/twinkle_speed = 1.20000005374012
+shader_parameter/star_size_base = 0.10000000149012
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fmom4"]
+shader = ExtResource("3_26is2")
+shader_parameter/sky_color = Color(0.05, 0.07, 0.1, 0.5)
+shader_parameter/cloud_color = Color(0.5625495, 0.6664319, 0.78058916, 0.8)
+shader_parameter/lightning_color = Color(0.7, 0.8, 1, 1)
+shader_parameter/rain_amount = 0.6
+shader_parameter/rain_speed = 5.0
+shader_parameter/rain_slant = 0.2
+shader_parameter/drop_length = 1.5
+shader_parameter/cloud_density = 1.0
+shader_parameter/cloud_speed = 0.30000001425
+shader_parameter/lightning_frequency = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fmom4"]
+atlas = ExtResource("4_26is2")
+region = Rect2(0, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57ev3"]
+atlas = ExtResource("4_26is2")
+region = Rect2(96, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qf2wu"]
+atlas = ExtResource("4_26is2")
+region = Rect2(192, 0, 96, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xy41a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fmom4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57ev3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qf2wu")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icc84"]
+bg_color = Color(0.1936, 0.21252, 0.22, 0.25490198)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_26is2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="background" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_ml61a")
+position = Vector2(11.499954, -2.500019)
+scale = Vector2(9.242187, 5.148437)
+texture = ExtResource("2_65xsj")
+
+[node name="chuva" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_fmom4")
+position = Vector2(6, -8.999999)
+scale = Vector2(-9.343753, 5.2800007)
+texture = ExtResource("2_65xsj")
+
+[node name="Asteroid01Base" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(-465, -105)
+texture = ExtResource("3_icc84")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Asteroid01Base"]
+modulate = Color(1, 1, 1, 0.89411765)
+z_index = -1
+position = Vector2(-2, -1)
+rotation = -2.3685882
+sprite_frames = SubResource("SpriteFrames_xy41a")
+autoplay = "default"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 282.0
+offset_top = 370.0
+offset_right = 878.0
+offset_bottom = 569.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_icc84")
+metadata/_edit_lock_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control/Panel"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 17.0
+offset_right = 575.0
+offset_bottom = 188.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 0)
+theme_override_fonts/normal_font = ExtResource("5_65xsj")
+theme_override_font_sizes/normal_font_size = 22
+scroll_active = false
+metadata/_edit_lock_ = true
+
+[node name="AVANCAR" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 927.0
+offset_top = 395.0
+offset_right = 1010.0
+offset_bottom = 426.0
+scale = Vector2(0.79240257, 4.7495766)
+text = ">"

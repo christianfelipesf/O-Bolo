@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://bklpqqdij2sg1"]
+[gd_scene load_steps=19 format=3 uid="uid://bklpqqdij2sg1"]
 
 [ext_resource type="Script" uid="uid://yfuy2v5b4fo0" path="res://Scene/principal.gd" id="1_5iwuv"]
 [ext_resource type="Texture2D" uid="uid://br2gppi5hd5tx" path="res://Images/principal.png" id="2_pxguf"]
+[ext_resource type="Texture2D" uid="uid://s08avxx242sh" path="res://Images/a5bbfead133882d0a9f4c14a092c97be9cbbf5a3.png" id="3_5iwuv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d1wwv"]
 radius = 7.0
@@ -114,6 +115,10 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_5iwuv"]
+cull_mode = 1
+polygon = PackedVector2Array(-6, -14, -10, -6, -6, 3, -6, 9, -5, 16, 1, 15, 6, 17, 7, 11, 7, 3, 10, -3, 11, -10, 6, -15)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 position = Vector2(63, 77)
 collision_layer = 5
@@ -132,5 +137,13 @@ position_smoothing_enabled = true
 sprite_frames = SubResource("SpriteFrames_820al")
 animation = &"baixo"
 
-[node name="Marker2D" type="Marker2D" parent="."]
+[node name="ataque" type="Marker2D" parent="."]
 position = Vector2(1, 2)
+
+[node name="luz" type="PointLight2D" parent="."]
+position = Vector2(1, 37)
+texture = ExtResource("3_5iwuv")
+texture_scale = 0.2
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_5iwuv")

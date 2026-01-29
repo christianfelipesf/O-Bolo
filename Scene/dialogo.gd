@@ -96,6 +96,7 @@ func teleportar_player():
 			player.velocity = Vector2.ZERO
 			
 		player.global_position = nova_posicao
+		player.start_position = nova_posicao
 		print("Player teleportado para: ", nova_posicao)
 
 func exibir_proxima_fala():

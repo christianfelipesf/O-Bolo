@@ -16,8 +16,8 @@ bg_color = Color(0.1936, 0.21252, 0.22, 0.25490198)
 [sub_resource type="CircleShape2D" id="CircleShape2D_no5or"]
 
 [sub_resource type="Gradient" id="Gradient_i147e"]
-offsets = PackedFloat32Array(0.006666667, 1)
-colors = PackedColorArray(0.1662736, 0.5235182, 0.8866573, 1, 1, 1, 1, 1)
+offsets = PackedFloat32Array(0.006666667, 0.99333334)
+colors = PackedColorArray(0.00016713291, 0.003572722, 0.012467729, 1, 0.21230483, 0.21230483, 0.21230483, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_xvafv"]
 noise_type = 0
@@ -1314,7 +1314,7 @@ metadata/_edit_lock_ = true
 
 [node name="Play" type="TouchScreenButton" parent="."]
 texture_filter = 1
-position = Vector2(983, 285)
+position = Vector2(983, 324)
 scale = Vector2(4, 4)
 texture_normal = ExtResource("1_05f8p")
 texture_pressed = ExtResource("2_1401v")
@@ -1323,7 +1323,7 @@ action = "interagir"
 
 [node name="Atacar" type="TouchScreenButton" parent="."]
 texture_filter = 1
-position = Vector2(911, 417)
+position = Vector2(911, 456)
 scale = Vector2(4, 4)
 texture_normal = ExtResource("3_0xtiu")
 texture_pressed = ExtResource("2_1401v")

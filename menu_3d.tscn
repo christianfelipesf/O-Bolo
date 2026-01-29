@@ -1,18 +1,27 @@
-[gd_scene load_steps=14 format=3 uid="uid://b3sm04uvddntk"]
+[gd_scene load_steps=13 format=3 uid="uid://b3sm04uvddntk"]
 
+[ext_resource type="Script" uid="uid://d1poeuys62j7p" path="res://info.gd" id="1_p1njt"]
 [ext_resource type="Script" uid="uid://dhk4xfpjryuw" path="res://Scene/startbutton.gd" id="1_utbun"]
+[ext_resource type="Shader" uid="uid://bvuiaksih76tx" path="res://sky.gdshader" id="1_x8tam"]
 [ext_resource type="Texture2D" uid="uid://bkpmbxw2cnho2" path="res://icon.svg" id="2_no0f4"]
-[ext_resource type="Texture2D" uid="uid://slyys6k6xt3k" path="res://Images/esfera.png" id="3_x8tam"]
 [ext_resource type="PackedScene" uid="uid://5ocgbdw0tyba" path="res://3d/bolo.glb" id="4_no0f4"]
+[ext_resource type="FontFile" uid="uid://bajivabu2xdd8" path="res://Font/SpaceMono-Regular.ttf" id="4_p1njt"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p1njt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p1njt"]
+shader = ExtResource("1_x8tam")
+shader_parameter/sky_color = Color(0.3620822, 0.5426541, 0.77224743, 1)
+shader_parameter/cloud_color = Color(0.8237062, 0.8253291, 0.88099855, 1)
+shader_parameter/lightning_color = Color(1, 1, 1, 1)
+shader_parameter/storm_density = 0.8
+shader_parameter/lightning_intensity = 0.5
 
 [sub_resource type="Sky" id="Sky_j5tum"]
-sky_material = SubResource("ProceduralSkyMaterial_p1njt")
+sky_material = SubResource("ShaderMaterial_p1njt")
 
 [sub_resource type="Environment" id="Environment_nb3gs"]
 background_mode = 2
 sky = SubResource("Sky_j5tum")
+fog_density = 0.5261
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_6fhkg"]
 viewport_path = NodePath("Sprite3D/SubViewport")
@@ -97,119 +106,24 @@ shader_parameter/cor_raio = Color(1, 0.9, 0.7, 1)
 shader_parameter/velocidade = 0.1
 shader_parameter/densidade = 0.5
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rn7e2"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_xxeck"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_x8tam")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="GDScript" id="GDScript_6ni0o"]
-resource_name = "seguir"
-script/source = "extends AnimatedSprite2D
-
-@export var velocidade_max: float = 300.0
-@export var aceleracao: float = 800.0
-@export var friccao: float = 400.0  # Faz ele deslizar um pouco ao parar
-@export var suavidade_curva: float = 0.15 # Quanto menor, mais \"pesada\" é a curva
-
-var velocidade_atual: Vector2 = Vector2.ZERO
-var alvo: CanvasItem = null
-
-var limite_min: Vector2
-var limite_max: Vector2
-
-func _ready() -> void:
-	await get_tree().process_frame
-	atualizar_limites()
-	invocar_bolinha()
-
-func _process(delta: float) -> void:
-	if alvo != null:
-		# 1. Direção desejada (onde ele quer ir)
-		var direcao_desejada = global_position.direction_to(alvo.global_position)
-		
-		# 2. Movimento Orgânico: Interpolação da velocidade
-		# Isso faz com que ele não mude de direção instantaneamente
-		var velocidade_alvo = direcao_desejada * velocidade_max
-		velocidade_atual = velocidade_atual.lerp(velocidade_alvo, suavidade_curva)
-		
-		# 3. Aplicar o movimento
-		global_position += velocidade_atual * delta
-		
-		# 4. Inclinação orgânica (Efeito visual de velocidade)
-		# O sprite inclina um pouco para a direção que está correndo
-		rotation = lerp_angle(rotation, direcao_desejada.x * 0.2, 0.1)
-		
-		# 5. Flip do Sprite e Animação
-		flip_h = velocidade_atual.x < 0
-		if sprite_frames.has_animation(\"run\"):
-			play(\"run\")
-			speed_scale = velocidade_atual.length() / velocidade_max # Animação acelera com ele
-
-		# 6. Checagem de distância
-		if global_position.distance_to(alvo.global_position) < 20.0:
-			comer_bolinha()
-	else:
-		# Parar organicamente com fricção
-		velocidade_atual = velocidade_atual.move_toward(Vector2.ZERO, friccao * delta)
-		global_position += velocidade_atual * delta
-		rotation = lerp_angle(rotation, 0, 0.1)
-		
-		if sprite_frames.has_animation(\"idle\"):
-			play(\"idle\")
-
-func comer_bolinha():
-	# Pequeno efeito de escala ao comer (Opcional)
-	var tween = create_tween()
-	tween.tween_property(self, \"scale\", Vector2(3.2, 3.2), 0.1)
-	tween.tween_property(self, \"scale\", Vector2(3.0, 3.0), 0.1)
-	
-	alvo.queue_free()
-	alvo = null
-	invocar_bolinha()
-
-func atualizar_limites():
-	var painel = get_parent() as Control
-	if painel:
-		limite_min = painel.global_position
-		limite_max = painel.global_position + painel.size
-
-func invocar_bolinha():
-	var nova_bolinha = ColorRect.new()
-	nova_bolinha.size = Vector2(12, 12)
-	nova_bolinha.color = Color.AZURE
-	get_parent().add_child(nova_bolinha)
-	
-	nova_bolinha.pivot_offset = nova_bolinha.size / 2
-	
-	# Posição aleatória
-	var margem = 40.0
-	var pos_x = randf_range(limite_min.x + margem, limite_max.x - margem)
-	var pos_y = randf_range(limite_min.y + margem, limite_max.y - margem)
-	nova_bolinha.global_position = Vector2(pos_x, pos_y)
-	
-	# Efeito de \"surgimento\" da bolinha
-	nova_bolinha.scale = Vector2.ZERO
-	var tween = create_tween()
-	tween.tween_property(nova_bolinha, \"scale\", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	
-	alvo = nova_bolinha
-"
-
 [node name="Node3D" type="Node3D"]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 1144.0
+offset_bottom = 648.0
+script = ExtResource("1_p1njt")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control"]
+layout_mode = 0
+offset_left = 591.0
+offset_top = 205.0
+offset_right = 1152.0
+offset_bottom = 620.0
+theme_override_fonts/normal_font = ExtResource("4_p1njt")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="Control"]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.6328632)
@@ -218,7 +132,11 @@ current = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_nb3gs")
 
+[node name="bolo" parent="." instance=ExtResource("4_no0f4")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.8503295, -0.7437276, -0.026075363)
+
 [node name="Sprite3D" type="Sprite3D" parent="."]
+visible = false
 texture = SubResource("ViewportTexture_6fhkg")
 
 [node name="SubViewport" type="SubViewport" parent="Sprite3D"]
@@ -230,35 +148,6 @@ position = Vector2(587.5, 292)
 scale = Vector2(10.1796875, 5.5625)
 texture = ExtResource("2_no0f4")
 
-[node name="Panel" type="Panel" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -29.0
-offset_bottom = -29.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_rn7e2")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Panel"]
-texture_filter = 1
-position = Vector2(571, 290)
-scale = Vector2(4, 4)
-sprite_frames = SubResource("SpriteFrames_xxeck")
-script = SubResource("GDScript_6ni0o")
-
-[node name="Button" type="Button" parent="."]
-offset_left = 379.0
-offset_top = 207.0
-offset_right = 749.0
-offset_bottom = 321.0
-theme_override_font_sizes/font_size = 48
-text = "(F) PROSSEGUIR"
-script = ExtResource("1_utbun")
-
-[node name="bolo" parent="." instance=ExtResource("4_no0f4")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.06806278, -0.5223698, 0.5755044)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.727976)
 light_energy = 0.175
@@ -267,3 +156,30 @@ light_bake_mode = 1
 shadow_enabled = true
 shadow_bias = 0.0
 sky_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 40.0
+offset_top = 171.0
+offset_right = 459.0
+offset_bottom = 419.0
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_p1njt")
+theme_override_font_sizes/font_size = 48
+text = "(F) Prosseguir"
+script = ExtResource("1_utbun")
+
+[node name="Menu" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_p1njt")
+theme_override_font_sizes/font_size = 48
+text = "Menu"
+
+[node name="Sobre" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_p1njt")
+theme_override_font_sizes/font_size = 48
+text = "Sobre"
+
+[connection signal="request_completed" from="Control/HTTPRequest" to="Control" method="_on_http_request_request_completed"]

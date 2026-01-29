@@ -1,7 +1,7 @@
 extends Button
 
 # Nome da ação que você configurou no Input Map (ex: "interact")
-const SCENE_PATH = "res://Scene/mundoaberto.tscn"
+const SCENE_PATH = "res://Scene/meteoranimation.tscn"
 
 func _ready() -> void:
 	# Conecta o clique do mouse

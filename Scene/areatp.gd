@@ -72,6 +72,7 @@ func aplicar_movimento_teleporte(player: Node2D) -> void:
 			player.velocity = Vector2.ZERO
 			
 		player.global_position = local #target_pos_v2
+		player.start_position = local
 		print("Portal: Player teleportado para ", local)
 	else:
 		push_error("ERRO: O Area2D não possui o metadado 'pos' do tipo Vector3!")

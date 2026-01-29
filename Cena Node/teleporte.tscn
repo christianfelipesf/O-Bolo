@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=3 uid="uid://doojgwid50pyr"]
+
+[ext_resource type="Script" uid="uid://j652qaj2dp0h" path="res://Scene/areatp.gd" id="1_lw3if"]
+[ext_resource type="Texture2D" uid="uid://dv616nyxd4grp" path="res://Images/Aseprite/enter.png" id="2_iy5o4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j4aw3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3b0qf"]
+atlas = ExtResource("2_iy5o4")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_snhuh"]
+atlas = ExtResource("2_iy5o4")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tc6e0"]
+atlas = ExtResource("2_iy5o4")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rv1h5"]
+atlas = ExtResource("2_iy5o4")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kctbb"]
+atlas = ExtResource("2_iy5o4")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_04nrs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3b0qf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_snhuh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tc6e0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rv1h5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kctbb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Teleporte" type="Area2D"]
+modulate = Color(1.4164544, 1.4164544, 1.4164544, 1)
+scale = Vector2(2, 2)
+script = ExtResource("1_lw3if")
+metadata/pos = Vector2(950, 1167)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.71746975, 0.41588283)
+shape = SubResource("CircleShape2D_j4aw3")
+
+[node name="TpHome" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_04nrs")
+autoplay = "default"
+
+[node name="Target" type="Marker2D" parent="."]
+position = Vector2(323, 386.5)

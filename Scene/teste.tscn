@@ -1,0 +1,183 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmftox1qyv1se"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hiqbl"]
+
+[sub_resource type="Sky" id="Sky_e1nby"]
+sky_material = SubResource("ProceduralSkyMaterial_hiqbl")
+
+[sub_resource type="Environment" id="Environment_wkh5q"]
+background_mode = 2
+sky = SubResource("Sky_e1nby")
+
+[sub_resource type="SphereMesh" id="SphereMesh_vo06n"]
+
+[sub_resource type="GDScript" id="GDScript_hiqbl"]
+resource_name = "randomball"
+script/source = "extends MeshInstance3D
+
+@export_group(\"Configurações de Área\")
+@export var raio_maximo: float = 15.0    
+@export var tempo_invocacao: float = 3.0 
+
+@export_group(\"Movimentação\")
+@export var velocidade: float = 10.0
+@export var suavidade_giro: float = 6.0
+
+@export_group(\"Efeitos da Bola\")
+@export var cor_bola: Color = Color(0.1, 0.8, 1.0) # Azul Neon
+@export var cor_particula_bola: Color = Color(1, 1, 0) # Amarelo
+
+@export_group(\"Efeitos do Objeto\")
+@export var cor_rastro_objeto: Color = Color(1, 0.2, 0.2) # Vermelho
+
+var centro_da_area: Vector3
+var alvo_atual: MeshInstance3D = null
+var cronometro: float = 0.0
+var material_bola: ShaderMaterial
+
+func _ready() -> void:
+	# Define o centro fixo na posição inicial
+	centro_da_area = global_position
+	
+	_criar_rastro_objeto()
+	_preparar_shader_bola()
+	
+	# Invoca a primeira bola imediatamente no início
+	invocar_nova_bola()
+	
+	# Reinicia o cronômetro para garantir que a próxima leve o tempo correto
+	cronometro = 0.0
+
+func _process(delta: float) -> void:
+	# Incrementa o tempo
+	cronometro += delta
+	
+	# Verifica se é hora de mudar a bola de lugar
+	if cronometro >= tempo_invocacao:
+		invocar_nova_bola()
+		cronometro = 0.0
+
+	# Movimentação contínua em direção ao alvo
+	if is_instance_valid(alvo_atual):
+		perseguir_alvo(delta)
+		# Atualiza o tempo no shader para o efeito visual de pulsação
+		material_bola.set_shader_parameter(\"p_time\", Time.get_ticks_msec() / 1000.0)
+
+func _preparar_shader_bola():
+	material_bola = ShaderMaterial.new()
+	var shader = Shader.new()
+	shader.code = \"\"\"
+	shader_type spatial;
+	render_mode unshaded;
+	uniform vec4 albedo : source_color;
+	uniform float p_time;
+	void fragment() {
+		float pulse = sin(p_time * 8.0) * 0.4 + 0.6;
+		ALBEDO = albedo.rgb * pulse;
+		EMISSION = albedo.rgb * pulse * 2.0;
+	}
+	\"\"\"
+	material_bola.shader = shader
+	material_bola.set_shader_parameter(\"albedo\", cor_bola)
+
+func _criar_rastro_objeto():
+	var p = GPUParticles3D.new()
+	add_child(p)
+	
+	var mat = ParticleProcessMaterial.new()
+	mat.gravity = Vector3.ZERO
+	mat.direction = Vector3.ZERO
+	mat.spread = 0
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_POINT
+	
+	# Gradiente de cor para o rastro sumir suavemente
+	var grad = Gradient.new()
+	grad.set_color(0, cor_rastro_objeto)
+	grad.set_color(1, Color(cor_rastro_objeto, 0))
+	var grad_tex = GradientTexture1D.new()
+	grad_tex.gradient = grad
+	mat.color_ramp = grad_tex
+	
+	p.process_material = mat
+	p.amount = 50
+	p.lifetime = 0.5
+	p.draw_pass_1 = SphereMesh.new()
+	p.draw_pass_1.radius = 0.1
+	p.draw_pass_1.height = 0.2
+	
+	# Material das partículas do rastro
+	var p_mat = StandardMaterial3D.new()
+	p_mat.shading_mode = StandardMaterial3D.SHADING_MODE_UNSHADED
+	p_mat.vertex_color_use_as_albedo = true
+	p_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	p.draw_pass_1.material = p_mat
+
+func invocar_nova_bola():
+	# Remove a bola anterior se ela existir
+	if is_instance_valid(alvo_atual):
+		alvo_atual.queue_free()
+
+	# Cria a nova bola alvo
+	var bola = MeshInstance3D.new()
+	bola.mesh = SphereMesh.new()
+	bola.scale = Vector3(0.5, 0.5, 0.5)
+	bola.material_override = material_bola
+	
+	# Calcula a posição aleatória sempre baseada no centro fixo original
+	var angle = randf() * TAU
+	var dist = randf() * raio_maximo
+	var offset = Vector3(cos(angle) * dist, randf_range(-2, 5), sin(angle) * dist)
+	
+	# Adiciona ao mundo (parent) para que ela não se mova junto com o objeto principal
+	get_parent().add_child(bola)
+	bola.global_position = centro_da_area + offset
+	alvo_atual = bola
+	
+	# Efeito de Luz
+	var luz = OmniLight3D.new()
+	luz.light_color = cor_bola
+	luz.light_energy = 3.0
+	luz.omni_range = 6.0
+	bola.add_child(luz)
+	
+	# Partículas de brilho na bola
+	var p_bola = GPUParticles3D.new()
+	bola.add_child(p_bola)
+	var p_mat = ParticleProcessMaterial.new()
+	p_mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	p_mat.emission_sphere_radius = 0.5
+	p_mat.gravity = Vector3(0, 0.5, 0)
+	p_mat.color = cor_particula_bola
+	p_bola.process_material = p_mat
+	p_bola.amount = 20
+	p_bola.draw_pass_1 = QuadMesh.new()
+	p_bola.draw_pass_1.size = Vector2(0.1, 0.1)
+	var m_part = StandardMaterial3D.new()
+	m_part.shading_mode = StandardMaterial3D.SHADING_MODE_UNSHADED
+	m_part.billboard_mode = StandardMaterial3D.BILLBOARD_ENABLED
+	p_bola.draw_pass_1.material = m_part
+
+func perseguir_alvo(delta: float):
+	var pos_alvo = alvo_atual.global_position
+	
+	# Move a posição do objeto
+	global_position = global_position.move_toward(pos_alvo, velocidade * delta)
+	
+	# Rotaciona suavemente para encarar o alvo
+	if global_position.distance_to(pos_alvo) > 0.1:
+		var transform_alvo = global_transform.looking_at(pos_alvo, Vector3.UP)
+		global_transform = global_transform.interpolate_with(transform_alvo, suavidade_giro * delta)
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.96294636, 0.26969302, 0, -0.26969302, 0.96294636, 0, 3.3287435, 4.2246485)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wkh5q")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.2127743)
+mesh = SubResource("SphereMesh_vo06n")
+script = SubResource("GDScript_hiqbl")

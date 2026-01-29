@@ -24,8 +24,8 @@ offset_bottom = 40.0
 script = ExtResource("2_8bcml")
 
 [node name="Sprite2D" type="Sprite2D" parent="Control"]
-position = Vector2(579.5, 332.25)
-scale = Vector2(4.6367188, 665.5)
+position = Vector2(578.75006, 319.49997)
+scale = Vector2(4.5175786, 650.99994)
 texture = SubResource("GradientTexture1D_8bcml")
 
 [node name="Label" type="Label" parent="Control"]

@@ -12,7 +12,7 @@ var indice_fala: int = 0
 var dialogo_ativo: bool = false
 
 # --- Configurações de Interação ---
-@export var interacao_distancia: float = 30.0
+@export var interacao_distancia: float = 40.0
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var attach_node = $Attach
 
@@ -27,7 +27,7 @@ func _process(_delta: float) -> void:
 		var olhando = _player_esta_olhando()
 		
 		# Lógica do Contorno (Shader)
-		if distancia <= interacao_distancia and olhando:
+		if distancia <= interacao_distancia:
 			material.set_shader_parameter("line_thickness", 1.5)
 			
 			# BOTÃO DE INTERAÇÃO (F)
