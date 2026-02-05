@@ -1,8 +1,13 @@
-[gd_scene load_steps=19 format=3 uid="uid://bklpqqdij2sg1"]
+[gd_scene load_steps=22 format=3 uid="uid://bklpqqdij2sg1"]
 
 [ext_resource type="Script" uid="uid://yfuy2v5b4fo0" path="res://Scene/principal.gd" id="1_5iwuv"]
+[ext_resource type="Script" uid="uid://dgjv7oh3vo7ku" path="res://Scripts/Player/interaction_manager.gd" id="2_mxy6q"]
 [ext_resource type="Texture2D" uid="uid://br2gppi5hd5tx" path="res://Images/principal.png" id="2_pxguf"]
 [ext_resource type="Texture2D" uid="uid://s08avxx242sh" path="res://Images/a5bbfead133882d0a9f4c14a092c97be9cbbf5a3.png" id="3_5iwuv"]
+[ext_resource type="Script" uid="uid://do6g6rk0rx83g" path="res://Scripts/Player/health_component.gd" id="4_pxguf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5iwuv"]
+radius = 106.47065
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_d1wwv"]
 radius = 7.0
@@ -124,6 +129,13 @@ position = Vector2(63, 77)
 collision_layer = 5
 script = ExtResource("1_5iwuv")
 
+[node name="InteractionManager" type="Area2D" parent="."]
+scale = Vector2(1.1999979, 1.1200006)
+script = ExtResource("2_mxy6q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionManager"]
+shape = SubResource("CircleShape2D_5iwuv")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 11)
 shape = SubResource("CapsuleShape2D_d1wwv")
@@ -142,8 +154,12 @@ position = Vector2(1, 2)
 
 [node name="luz" type="PointLight2D" parent="."]
 position = Vector2(1, 37)
+shadow_enabled = true
 texture = ExtResource("3_5iwuv")
 texture_scale = 0.2
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
 occluder = SubResource("OccluderPolygon2D_5iwuv")
+
+[node name="HealthComponent" type="Node2D" parent="."]
+script = ExtResource("4_pxguf")

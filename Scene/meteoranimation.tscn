@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ns5dtsgs5pc6"]
+[gd_scene load_steps=18 format=3 uid="uid://ns5dtsgs5pc6"]
 
 [ext_resource type="Script" uid="uid://d0rhmue4wmq7q" path="res://Scripts/meteoranimation.gd" id="1_26is2"]
 [ext_resource type="Shader" uid="uid://ceoi1p1sh17dx" path="res://nightsky.gdshader" id="1_j3q2m"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://cy8mcss6lxj31" path="res://Images/Void_EnvironmentPack/Asteroids/PNGs/Asteroid 01 - Base.png" id="3_icc84"]
 [ext_resource type="Texture2D" uid="uid://dfvtbn8eui1av" path="res://Images/Void_EnvironmentPack/Effects/PNGs/Asteroid - Flame.png" id="4_26is2"]
 [ext_resource type="FontFile" uid="uid://bajivabu2xdd8" path="res://Font/SpaceMono-Regular.ttf" id="5_65xsj"]
+[ext_resource type="Texture2D" uid="uid://dvm1g3apndy3m" path="res://Images/button/sprite_0.png" id="8_fmom4"]
+[ext_resource type="Texture2D" uid="uid://dsnj5lqjp5mp1" path="res://Images/button/sprite_1.png" id="9_57ev3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ml61a"]
 shader = ExtResource("1_j3q2m")
@@ -62,6 +64,8 @@ animations = [{
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icc84"]
 bg_color = Color(0.1936, 0.21252, 0.22, 0.25490198)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qf2wu"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_26is2")
@@ -126,11 +130,11 @@ theme_override_font_sizes/normal_font_size = 22
 scroll_active = false
 metadata/_edit_lock_ = true
 
-[node name="AVANCAR" type="Button" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_left = 927.0
-offset_top = 395.0
-offset_right = 1010.0
-offset_bottom = 426.0
-scale = Vector2(0.79240257, 4.7495766)
-text = ">"
+[node name="Play" type="TouchScreenButton" parent="CanvasLayer/Control"]
+texture_filter = 1
+position = Vector2(926, 402)
+scale = Vector2(4, 4)
+texture_normal = ExtResource("8_fmom4")
+texture_pressed = ExtResource("9_57ev3")
+shape = SubResource("CircleShape2D_qf2wu")
+action = "interagir"

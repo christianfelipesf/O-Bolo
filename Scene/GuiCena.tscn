@@ -1,9 +1,8 @@
-[gd_scene load_steps=24 format=4 uid="uid://bosidlf68empu"]
+[gd_scene load_steps=23 format=4 uid="uid://bosidlf68empu"]
 
 [ext_resource type="FontFile" uid="uid://bajivabu2xdd8" path="res://Font/SpaceMono-Regular.ttf" id="1_4yh4l"]
-[ext_resource type="Texture2D" uid="uid://dvm1g3apndy3m" path="res://Images/button/sprite_0.png" id="1_05f8p"]
+[ext_resource type="Texture2D" uid="uid://bh0m3b5i5sujq" path="res://Images/button/espadago.png" id="2_0xtiu"]
 [ext_resource type="Texture2D" uid="uid://dsnj5lqjp5mp1" path="res://Images/button/sprite_1.png" id="2_1401v"]
-[ext_resource type="Texture2D" uid="uid://casrv5faw53ok" path="res://Images/button/espadabutton.png" id="3_0xtiu"]
 [ext_resource type="Texture2D" uid="uid://bh6os4umph08p" path="res://Images/button/sprite_2.png" id="3_y47j8"]
 [ext_resource type="Texture2D" uid="uid://d7sf7ajg83ca" path="res://Images/button/sprite_3.png" id="4_ru043"]
 [ext_resource type="Texture2D" uid="uid://bn0eqeqcr8yen" path="res://Images/button/sprite_4.png" id="5_wtu24"]
@@ -1314,21 +1313,12 @@ metadata/_edit_lock_ = true
 
 [node name="Play" type="TouchScreenButton" parent="."]
 texture_filter = 1
-position = Vector2(983, 324)
+position = Vector2(937, 378)
 scale = Vector2(4, 4)
-texture_normal = ExtResource("1_05f8p")
+texture_normal = ExtResource("2_0xtiu")
 texture_pressed = ExtResource("2_1401v")
 shape = SubResource("CircleShape2D_no5or")
 action = "interagir"
-
-[node name="Atacar" type="TouchScreenButton" parent="."]
-texture_filter = 1
-position = Vector2(911, 456)
-scale = Vector2(4, 4)
-texture_normal = ExtResource("3_0xtiu")
-texture_pressed = ExtResource("2_1401v")
-shape = SubResource("CircleShape2D_no5or")
-action = "atacar"
 
 [node name="CIMA" type="TouchScreenButton" parent="."]
 texture_filter = 1

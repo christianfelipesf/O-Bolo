@@ -9,18 +9,20 @@ extends Node2D
 ]
 
 var indice_fala: int = 0
+var esta_digitando: bool = false # Nova trava de segurança
 
 # --- Referências da UI ---
 @onready var ui_control = $CanvasLayer/Control
 @onready var ui_texto = $CanvasLayer/Control/Panel/RichTextLabel
-@onready var botao_avancar = $CanvasLayer/Control/AVANCAR
 
 func _ready() -> void:
-	# Conecta o botão de avançar
-	botao_avancar.pressed.connect(_on_botao_avancar_pressed)
-	
 	# Inicia o sistema
 	iniciar_dialogo()
+
+# Detecta a tecla de interação
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("interagir") and ui_control.visible:
+		exibir_proxima_fala()
 
 func iniciar_dialogo():
 	indice_fala = 0
@@ -28,25 +30,24 @@ func iniciar_dialogo():
 	exibir_proxima_fala()
 
 func exibir_proxima_fala():
-	# Verifica se ainda existem falas no Array
+	# Se ainda estiver animando o texto, podemos pular a animação (opcional)
+	if esta_digitando:
+		return 
+
 	if indice_fala < falas.size():
 		ui_texto.text = falas[indice_fala]
 		
-		# Efeito de digitar
+		# Efeito de digitar com trava de segurança
+		esta_digitando = true
 		ui_texto.visible_ratio = 0.0
 		var t = create_tween()
 		t.tween_property(ui_texto, "visible_ratio", 1.0, 0.5)
+		t.finished.connect(func(): esta_digitando = false)
 		
 		indice_fala += 1
 	else:
-		# Quando as falas acabam, muda para o mundo aberto
 		ir_para_mundo_aberto()
 
-func _on_botao_avancar_pressed():
-	exibir_proxima_fala()
-
 func ir_para_mundo_aberto():
-	# Esconde a UI antes de mudar para não bugar visualmente
 	ui_control.visible = false
-	# Muda para a cena do mundo aberto
 	get_tree().change_scene_to_file("res://Scene/mundoaberto.tscn")

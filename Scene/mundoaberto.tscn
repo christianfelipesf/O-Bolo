@@ -1,19 +1,18 @@
-[gd_scene load_steps=105 format=4 uid="uid://bv7bx61hb70fc"]
+[gd_scene load_steps=113 format=4 uid="uid://bv7bx61hb70fc"]
 
 [ext_resource type="Texture2D" uid="uid://bmwg5vaf34p85" path="res://Images/Tilemap/Water+.png" id="1_6un4p"]
 [ext_resource type="Texture2D" uid="uid://du64pw051mocm" path="res://Images/Tilemap/InteriorTilesLITE.png" id="1_pd30k"]
 [ext_resource type="Shader" uid="uid://dvoupbbwvcxum" path="res://Scene/mundoaberto.gdshader" id="4_0l5wp"]
 [ext_resource type="Texture2D" uid="uid://djs1asf4nsob7" path="res://Images/Tilemap/zeo254-completed-commission.png" id="4_mi4ae"]
-[ext_resource type="Script" uid="uid://d0yt30ij4t1sd" path="res://Scene/mae.gd" id="5_8pfo8"]
 [ext_resource type="Texture2D" uid="uid://dqjmwun5qluhg" path="res://Packs/VisuStellaSpringForest/img/tilesets/VSW_SpringForest_A5.png" id="5_61upq"]
 [ext_resource type="Texture2D" uid="uid://bkc7g1nk3d77c" path="res://Images/Tilemap/Dungeon_Tileset.png" id="6_dkqf1"]
 [ext_resource type="Texture2D" uid="uid://dtis60jsenrd8" path="res://Images/psec.png" id="6_negto"]
 [ext_resource type="Texture2D" uid="uid://cuw6olm5xmbhm" path="res://Images/Tree/Blocky_VikingVillage_Tileset.png" id="7_5ok1v"]
 [ext_resource type="PackedScene" uid="uid://ddm8rvcbgtgh3" path="res://Cena Node/poste.tscn" id="7_snhuh"]
+[ext_resource type="Script" uid="uid://dsxj1l7o3hgxx" path="res://Scripts/mae.gd" id="8_3b0qf"]
 [ext_resource type="PackedScene" uid="uid://bna71kfukefuy" path="res://Cena Node/bruxa.tscn" id="8_gg2qv"]
 [ext_resource type="AudioStream" uid="uid://dcbtulcx0tji0" path="res://Sound/chonology-of-love-6094.mp3" id="8_n2276"]
 [ext_resource type="PackedScene" uid="uid://bklpqqdij2sg1" path="res://PlayerCena.tscn" id="11_ulwjq"]
-[ext_resource type="Script" uid="uid://e6t1pgl8jxxi" path="res://Scene/dialogo.gd" id="13_2ukx5"]
 [ext_resource type="PackedScene" uid="uid://doojgwid50pyr" path="res://Cena Node/teleporte.tscn" id="13_3b0qf"]
 [ext_resource type="AudioStream" uid="uid://cs70ej2th503a" path="res://Sound/audio.mp3" id="14_syw5o"]
 [ext_resource type="PackedScene" uid="uid://bosidlf68empu" path="res://Scene/GuiCena.tscn" id="17_5ok1v"]
@@ -23,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://cuvbmtrkl4cau" path="res://Cena Node/Inimigo_base.tscn" id="24_mi4ae"]
 [ext_resource type="Texture2D" uid="uid://c3mrfdacddkhb" path="res://Images/Aseprite/coracao.png" id="25_61upq"]
 [ext_resource type="Texture2D" uid="uid://bs6vrow62ipgy" path="res://exportacao/index.icon.png" id="28_3b0qf"]
+[ext_resource type="Script" uid="uid://b1y6agp4h3q48" path="res://Scene/area_2d.gd" id="28_snhuh"]
+[ext_resource type="Texture2D" uid="uid://tgw4ou5lct6o" path="res://Images/Aseprite/meteor.png" id="29_snhuh"]
 [ext_resource type="PackedScene" uid="uid://btttut47npacn" path="res://Cena Node/voador.tscn" id="30_tc6e0"]
 [ext_resource type="Shader" uid="uid://etdfrlqp4lv5" path="res://Scene/nuvens.gdshader" id="31_kctbb"]
 [ext_resource type="Texture2D" uid="uid://bkpmbxw2cnho2" path="res://icon.svg" id="32_04nrs"]
@@ -2967,6 +2968,46 @@ size = Vector2(62, 62)
 radius = 99.0
 height = 274.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7th6"]
+shader = ExtResource("4_0l5wp")
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
+shader_parameter/flash_modifier = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n2276"]
+atlas = ExtResource("6_negto")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pfo8"]
+atlas = ExtResource("6_negto")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0l5wp"]
+atlas = ExtResource("6_negto")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s7th6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n2276")
+}, {
+"duration": 20.0,
+"texture": SubResource("AtlasTexture_8pfo8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0l5wp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_snhuh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rv1h5"]
+radius = 86.46965
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gg2qv"]
 texture = ExtResource("7_5ok1v")
 texture_region_size = Vector2i(32, 32)
@@ -4395,50 +4436,9 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_gg2qv")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s7th6"]
-shader = ExtResource("4_0l5wp")
-shader_parameter/line_color = Color(1, 1, 1, 1)
-shader_parameter/line_thickness = 0.0
-shader_parameter/flash_modifier = 0.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n2276"]
-atlas = ExtResource("6_negto")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8pfo8"]
-atlas = ExtResource("6_negto")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0l5wp"]
-atlas = ExtResource("6_negto")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_s7th6"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n2276")
-}, {
-"duration": 20.0,
-"texture": SubResource("AtlasTexture_8pfo8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0l5wp")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rx0yy"]
 radius = 13.500702
 height = 83.00427
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_5ok1v"]
-a = Vector2(53, 8)
-
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_gg2qv"]
-b = Vector2(2, 55)
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_5ok1v"]
 blend_mode = 2
@@ -4736,6 +4736,31 @@ glow_enabled = true
 glow_hdr_scale = 0.02
 glow_hdr_luminance_cap = 0.2
 
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_5ok1v"]
+a = Vector2(53, 8)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_gg2qv"]
+b = Vector2(2, 55)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3b0qf"]
+radius = 43.289722
+
+[sub_resource type="Gradient" id="Gradient_tc6e0"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.93, 0.54560006, 0.3534, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rv1h5"]
+gradient = SubResource("Gradient_tc6e0")
+width = 1
+
+[sub_resource type="Gradient" id="Gradient_snhuh"]
+offsets = PackedFloat32Array(0.006849315, 1)
+colors = PackedColorArray(0.9425082, 0.49135846, 0.2612792, 1, 0.97293395, 0.91242754, 0, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_snhuh"]
+radius = 9.0
+height = 52.02417
+
 [node name="Mundoaberto" type="Node2D"]
 metadata/_edit_horizontal_guides_ = [-298.0, -295.0, -237.0]
 
@@ -4775,29 +4800,6 @@ visible = false
 position = Vector2(128, -31)
 shape = SubResource("RectangleShape2D_rx0yy")
 
-[node name="Postes" type="Node2D" parent="TileMapLayer"]
-
-[node name="Poste" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(857, 1199)
-
-[node name="Poste2" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(853, 1553)
-
-[node name="Poste4" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(1200, 1568)
-
-[node name="Poste5" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(1967, 1585)
-
-[node name="Poste6" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(2655, 1225)
-
-[node name="Poste7" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(2919, 993)
-
-[node name="Poste3" parent="TileMapLayer/Postes" instance=ExtResource("7_snhuh")]
-position = Vector2(853, 1988)
-
 [node name="Estruturas" type="Node2D" parent="."]
 
 [node name="Casa" type="StaticBody2D" parent="Estruturas"]
@@ -4813,31 +4815,36 @@ frame = 2
 position = Vector2(-17, 1)
 shape = SubResource("CapsuleShape2D_i4ukq")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Estruturas"]
-position = Vector2(1, -3)
-tile_map_data = PackedByteArray("AAAjACAAAAAkABYAAAAjACEAAAAkABcAAAAjACIAAAAkABgAAAAkACAAAAAlABYAAAAkACEAAAAlABcAAAAkACIAAAAlABgAAAAkACMAAAAlABkAAAAlACAAAAAmABYAAAAlACEAAAAmABcAAAAlACIAAAAmABgAAAAlACMAAAAmABkAAAAmACAAAAAnABYAAAAmACEAAAAnABcAAAAmACIAAAAnABgAAAAmACMAAAAnABkAAAAWACwAAAAkABYAAAAWAC0AAAAkABcAAAAWAC4AAAAkABgAAAAXACwAAAAlABYAAAAXAC0AAAAlABcAAAAXAC4AAAAlABgAAAAXAC8AAAAlABkAAAAYACwAAAAmABYAAAAYAC0AAAAmABcAAAAYAC4AAAAmABgAAAAYAC8AAAAmABkAAAAZACwAAAAnABYAAAAZAC0AAAAnABcAAAAZAC4AAAAnABgAAAAZAC8AAAAnABkAAAAXADoAAAAGAB8AAAAXADsAAAAGACAAAAAXADwAAAAGACEAAAAYADkAAAAHAB4AAAAYADoAAAAHAB8AAAAYADsAAAAHACAAAAAYADwAAAAHACEAAAAZADkAAAAIAB4AAAAZADoAAAAIAB8AAAAZADsAAAAIACAAAAAZADwAAAAIACEAAAAaADoAAAAJAB8AAAAaADsAAAAJACAAAAAaADwAAAAJACEAAAA5ACIAAAAGAB8AAAA5ACMAAAAGACAAAAA5ACQAAAAGACEAAAA6ACEAAAAHAB4AAAA6ACIAAAAHAB8AAAA6ACMAAAAHACAAAAA6ACQAAAAHACEAAAA7ACEAAAAIAB4AAAA7ACIAAAAIAB8AAAA7ACMAAAAIACAAAAA7ACQAAAAIACEAAAA8ACIAAAAJAB8AAAA8ACMAAAAJACAAAAA8ACQAAAAJACEAAAAxADUAAAAkABYAAAAxADYAAAAkABcAAAAyADUAAAAlABYAAAAyADYAAAAlABcAAAAyADcAAAAlABgAAAAyADgAAAAlABkAAAAzADUAAAAmABYAAAAzADYAAAAmABcAAAAzADcAAAAmABgAAAAzADgAAAAmABkAAAA0ADUAAAAnABYAAAA0ADYAAAAnABcAAAA0ADcAAAAnABgAAAA0ADgAAAAnABkAAABGAEAAAAAkABYAAABGAEEAAAAkABcAAABGAEIAAAAkABgAAABHAEAAAAAlABYAAABHAEEAAAAlABcAAABHAEIAAAAlABgAAABHAEMAAAAlABkAAABIAEAAAAAmABYAAABIAEEAAAAmABcAAABIAEIAAAAmABgAAABIAEMAAAAmABkAAABJAEAAAAAnABYAAABJAEEAAAAnABcAAABJAEIAAAAnABgAAABJAEMAAAAnABkAAAA+ADcAAAAGAB8AAAA+ADgAAAAGACAAAAA+ADkAAAAGACEAAAA/ADYAAAAHAB4AAAA/ADcAAAAHAB8AAAA/ADgAAAAHACAAAAA/ADkAAAAHACEAAABAADYAAAAIAB4AAABAADcAAAAIAB8AAABAADgAAAAIACAAAABAADkAAAAIACEAAABBADcAAAAJAB8AAABBADgAAAAJACAAAABBADkAAAAJACEAAABNADIAAAAlABkAAABOADIAAAAmABkAAABPADIAAAAnABkAAABMAC8AAAAkABYAAABMADAAAAAkABcAAABMADEAAAAkABgAAABNAC8AAAAlABYAAABNADAAAAAlABcAAABNADEAAAAlABgAAABOAC8AAAAmABYAAABOADAAAAAmABcAAABOADEAAAAmABgAAABPAC8AAAAnABYAAABPADAAAAAnABcAAABPADEAAAAnABgAAABPADsAAAAkABcAAABPADwAAAAkABgAAABQADsAAAAlABcAAABQADwAAAAlABgAAABQAD0AAAAlABkAAABPADoAAAAkABYAAABQADoAAAAlABYAAABRADoAAAAmABYAAABRADsAAAAmABcAAABRADwAAAAmABgAAABRAD0AAAAmABkAAABSADoAAAAnABYAAABSADsAAAAnABcAAABSADwAAAAnABgAAABSAD0AAAAnABkAAABBACYAAAAkABYAAABBACcAAAAkABcAAABBACgAAAAkABgAAABCACYAAAAlABYAAABCACcAAAAlABcAAABCACgAAAAlABgAAABCACkAAAAlABkAAABDACYAAAAmABYAAABDACcAAAAmABcAAABDACgAAAAmABgAAABDACkAAAAmABkAAABEACYAAAAnABYAAABEACcAAAAnABcAAABEACgAAAAnABgAAABEACkAAAAnABkAAABWACIAAAAkABYAAABWACMAAAAkABcAAABWACQAAAAkABgAAABXACIAAAAlABYAAABXACMAAAAlABcAAABXACQAAAAlABgAAABXACUAAAAlABkAAABYACIAAAAmABYAAABYACMAAAAmABcAAABYACQAAAAmABgAAABYACUAAAAmABkAAABZACIAAAAnABYAAABZACMAAAAnABcAAABZACQAAAAnABgAAABZACUAAAAnABkAAAArACUAAAAkABYAAAArACYAAAAkABcAAAArACcAAAAkABgAAAAsACUAAAAlABYAAAAsACYAAAAlABcAAAAsACcAAAAlABgAAAAsACgAAAAlABkAAAAtACUAAAAmABYAAAAtACYAAAAmABcAAAAtACcAAAAmABgAAAAtACgAAAAmABkAAAAuACUAAAAnABYAAAAuACYAAAAnABcAAAAuACcAAAAnABgAAAAuACgAAAAnABkAAAAiADgAAAAkABYAAAAiADkAAAAkABcAAAAiADoAAAAkABgAAAAjADgAAAAlABYAAAAjADkAAAAlABcAAAAjADoAAAAlABgAAAAjADsAAAAlABkAAAAkADgAAAAmABYAAAAkADkAAAAmABcAAAAkADoAAAAmABgAAAAkADsAAAAmABkAAAAlADgAAAAnABYAAAAlADkAAAAnABcAAAAlADoAAAAnABgAAAAlADsAAAAnABkAAAAMAEAAAAAlABYAAAANAEAAAAAmABYAAAANAEEAAAAmABcAAAAOAEAAAAAnABYAAAAOAEEAAAAnABcAAAALAEAAAAAkABYAAAALAEEAAAAkABcAAAALAEIAAAAkABgAAAAMAEEAAAAlABcAAAAMAEIAAAAlABgAAAAMAEMAAAAlABkAAAANAEIAAAAmABgAAAANAEMAAAAmABkAAAAOAEIAAAAnABgAAAAOAEMAAAAnABkAAAAEAEgAAAAAAB0AAAAEAEkAAAAAAB4AAAAEAEoAAAAAAB8AAAAEAEsAAAAAACAAAAAFAEYAAAABABsAAAAFAEcAAAABABwAAAAFAEgAAAABAB0AAAAFAEkAAAABAB4AAAAFAEoAAAABAB8AAAAFAEsAAAABACAAAAAGAEUAAAACABoAAAAGAEYAAAACABsAAAAGAEcAAAACABwAAAAGAEgAAAACAB0AAAAGAEkAAAACAB4AAAAGAEoAAAACAB8AAAAGAEsAAAACACAAAAAHAEUAAAADABoAAAAHAEYAAAADABsAAAAHAEcAAAADABwAAAAHAEgAAAADAB0AAAAHAEkAAAADAB4AAAAHAEoAAAADAB8AAAAHAEsAAAADACAAAAAIAEYAAAAEABsAAAAIAEcAAAAEABwAAAAIAEgAAAAEAB0AAAAIAEkAAAAEAB4AAAAIAEoAAAAEAB8AAAAIAEsAAAAEACAAAAAJAEgAAAAFAB0AAAAJAEkAAAAFAB4AAAAJAEoAAAAFAB8AAAAJAEsAAAAFACAAAAA=")
-tile_set = SubResource("TileSet_dkqf1")
-
-[node name="Mae" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_s7th6")
-position = Vector2(321, 86)
-sprite_frames = SubResource("SpriteFrames_s7th6")
-autoplay = "default"
-frame_progress = 0.8108749
-script = ExtResource("5_8pfo8")
+[node name="Mae" type="CharacterBody2D" parent="."]
+position = Vector2(319, 85)
+script = ExtResource("8_3b0qf")
 
 [node name="Button" type="Button" parent="Mae"]
-offset_left = -22.0
-offset_top = -54.0
-offset_right = 25.0
-offset_bottom = -18.0
+offset_left = -24.0
+offset_top = -50.0
+offset_right = 23.0
+offset_bottom = -14.0
 theme_override_font_sizes/font_size = 10
 text = "(F)
 Interact"
 
 [node name="audio" type="AudioStreamPlayer2D" parent="Mae"]
-position = Vector2(-734, -137)
+position = Vector2(-413, -51)
 stream = ExtResource("14_syw5o")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="Mae"]
+material = SubResource("ShaderMaterial_s7th6")
+sprite_frames = SubResource("SpriteFrames_s7th6")
+autoplay = "default"
+frame_progress = 0.8108749
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mae"]
+shape = SubResource("CircleShape2D_snhuh")
+
+[node name="Area2D" type="Area2D" parent="Mae"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mae/Area2D"]
+shape = SubResource("CircleShape2D_rv1h5")
 
 [node name="Teleporte" parent="." instance=ExtResource("13_3b0qf")]
 position = Vector2(305, 400)
@@ -4848,6 +4855,34 @@ position = Vector2(-418, -80)
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("8_n2276")
 autoplay = true
+
+[node name="Postes" type="Node2D" parent="."]
+
+[node name="Poste" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(857, 1199)
+
+[node name="Poste2" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(853, 1553)
+
+[node name="Poste4" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(1200, 1568)
+
+[node name="Poste5" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(1967, 1585)
+
+[node name="Poste6" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(2655, 1225)
+
+[node name="Poste7" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(2919, 993)
+
+[node name="Poste3" parent="Postes" instance=ExtResource("7_snhuh")]
+position = Vector2(853, 1988)
+
+[node name="Arvores" type="TileMapLayer" parent="Postes"]
+position = Vector2(1, -3)
+tile_map_data = PackedByteArray("AAAjACAAAAAkABYAAAAjACEAAAAkABcAAAAjACIAAAAkABgAAAAkACAAAAAlABYAAAAkACEAAAAlABcAAAAkACIAAAAlABgAAAAkACMAAAAlABkAAAAlACAAAAAmABYAAAAlACEAAAAmABcAAAAlACIAAAAmABgAAAAlACMAAAAmABkAAAAmACAAAAAnABYAAAAmACEAAAAnABcAAAAmACIAAAAnABgAAAAmACMAAAAnABkAAAAWACwAAAAkABYAAAAWAC0AAAAkABcAAAAWAC4AAAAkABgAAAAXACwAAAAlABYAAAAXAC0AAAAlABcAAAAXAC4AAAAlABgAAAAXAC8AAAAlABkAAAAYACwAAAAmABYAAAAYAC0AAAAmABcAAAAYAC4AAAAmABgAAAAYAC8AAAAmABkAAAAZACwAAAAnABYAAAAZAC0AAAAnABcAAAAZAC4AAAAnABgAAAAZAC8AAAAnABkAAAAXADoAAAAGAB8AAAAXADsAAAAGACAAAAAXADwAAAAGACEAAAAYADkAAAAHAB4AAAAYADoAAAAHAB8AAAAYADsAAAAHACAAAAAYADwAAAAHACEAAAAZADkAAAAIAB4AAAAZADoAAAAIAB8AAAAZADsAAAAIACAAAAAZADwAAAAIACEAAAAaADoAAAAJAB8AAAAaADsAAAAJACAAAAAaADwAAAAJACEAAAA5ACIAAAAGAB8AAAA5ACMAAAAGACAAAAA5ACQAAAAGACEAAAA6ACEAAAAHAB4AAAA6ACIAAAAHAB8AAAA6ACMAAAAHACAAAAA6ACQAAAAHACEAAAA7ACEAAAAIAB4AAAA7ACIAAAAIAB8AAAA7ACMAAAAIACAAAAA7ACQAAAAIACEAAAA8ACIAAAAJAB8AAAA8ACMAAAAJACAAAAA8ACQAAAAJACEAAAAxADUAAAAkABYAAAAxADYAAAAkABcAAAAyADUAAAAlABYAAAAyADYAAAAlABcAAAAyADcAAAAlABgAAAAyADgAAAAlABkAAAAzADUAAAAmABYAAAAzADYAAAAmABcAAAAzADcAAAAmABgAAAAzADgAAAAmABkAAAA0ADUAAAAnABYAAAA0ADYAAAAnABcAAAA0ADcAAAAnABgAAAA0ADgAAAAnABkAAABGAEAAAAAkABYAAABGAEEAAAAkABcAAABGAEIAAAAkABgAAABHAEAAAAAlABYAAABHAEEAAAAlABcAAABHAEIAAAAlABgAAABHAEMAAAAlABkAAABIAEAAAAAmABYAAABIAEEAAAAmABcAAABIAEIAAAAmABgAAABIAEMAAAAmABkAAABJAEAAAAAnABYAAABJAEEAAAAnABcAAABJAEIAAAAnABgAAABJAEMAAAAnABkAAAA+ADcAAAAGAB8AAAA+ADgAAAAGACAAAAA+ADkAAAAGACEAAAA/ADYAAAAHAB4AAAA/ADcAAAAHAB8AAAA/ADgAAAAHACAAAAA/ADkAAAAHACEAAABAADYAAAAIAB4AAABAADcAAAAIAB8AAABAADgAAAAIACAAAABAADkAAAAIACEAAABBADcAAAAJAB8AAABBADgAAAAJACAAAABBADkAAAAJACEAAABNADIAAAAlABkAAABOADIAAAAmABkAAABPADIAAAAnABkAAABMAC8AAAAkABYAAABMADAAAAAkABcAAABMADEAAAAkABgAAABNAC8AAAAlABYAAABNADAAAAAlABcAAABNADEAAAAlABgAAABOAC8AAAAmABYAAABOADAAAAAmABcAAABOADEAAAAmABgAAABPAC8AAAAnABYAAABPADAAAAAnABcAAABPADEAAAAnABgAAABPADsAAAAkABcAAABPADwAAAAkABgAAABQADsAAAAlABcAAABQADwAAAAlABgAAABQAD0AAAAlABkAAABPADoAAAAkABYAAABQADoAAAAlABYAAABRADoAAAAmABYAAABRADsAAAAmABcAAABRADwAAAAmABgAAABRAD0AAAAmABkAAABSADoAAAAnABYAAABSADsAAAAnABcAAABSADwAAAAnABgAAABSAD0AAAAnABkAAABBACYAAAAkABYAAABBACcAAAAkABcAAABBACgAAAAkABgAAABCACYAAAAlABYAAABCACcAAAAlABcAAABCACgAAAAlABgAAABCACkAAAAlABkAAABDACYAAAAmABYAAABDACcAAAAmABcAAABDACgAAAAmABgAAABDACkAAAAmABkAAABEACYAAAAnABYAAABEACcAAAAnABcAAABEACgAAAAnABgAAABEACkAAAAnABkAAABWACIAAAAkABYAAABWACMAAAAkABcAAABWACQAAAAkABgAAABXACIAAAAlABYAAABXACMAAAAlABcAAABXACQAAAAlABgAAABXACUAAAAlABkAAABYACIAAAAmABYAAABYACMAAAAmABcAAABYACQAAAAmABgAAABYACUAAAAmABkAAABZACIAAAAnABYAAABZACMAAAAnABcAAABZACQAAAAnABgAAABZACUAAAAnABkAAAArACUAAAAkABYAAAArACYAAAAkABcAAAArACcAAAAkABgAAAAsACUAAAAlABYAAAAsACYAAAAlABcAAAAsACcAAAAlABgAAAAsACgAAAAlABkAAAAtACUAAAAmABYAAAAtACYAAAAmABcAAAAtACcAAAAmABgAAAAtACgAAAAmABkAAAAuACUAAAAnABYAAAAuACYAAAAnABcAAAAuACcAAAAnABgAAAAuACgAAAAnABkAAAAiADgAAAAkABYAAAAiADkAAAAkABcAAAAiADoAAAAkABgAAAAjADgAAAAlABYAAAAjADoAAAAlABgAAAAjADsAAAAlABkAAAAkADoAAAAmABgAAAAkADsAAAAmABkAAAAlADgAAAAnABYAAAAlADkAAAAnABcAAAAlADoAAAAnABgAAAAlADsAAAAnABkAAAAMAEAAAAAlABYAAAANAEAAAAAmABYAAAANAEEAAAAmABcAAAAOAEAAAAAnABYAAAAOAEEAAAAnABcAAAALAEAAAAAkABYAAAALAEEAAAAkABcAAAALAEIAAAAkABgAAAAMAEEAAAAlABcAAAAMAEIAAAAlABgAAAAMAEMAAAAlABkAAAANAEIAAAAmABgAAAANAEMAAAAmABkAAAAOAEIAAAAnABgAAAAOAEMAAAAnABkAAAAEAEgAAAAAAB0AAAAEAEkAAAAAAB4AAAAEAEoAAAAAAB8AAAAEAEsAAAAAACAAAAAFAEYAAAABABsAAAAFAEcAAAABABwAAAAFAEgAAAABAB0AAAAFAEkAAAABAB4AAAAFAEoAAAABAB8AAAAFAEsAAAABACAAAAAGAEUAAAACABoAAAAGAEYAAAACABsAAAAGAEcAAAACABwAAAAGAEgAAAACAB0AAAAGAEkAAAACAB4AAAAGAEoAAAACAB8AAAAGAEsAAAACACAAAAAHAEUAAAADABoAAAAHAEYAAAADABsAAAAHAEcAAAADABwAAAAHAEgAAAADAB0AAAAHAEkAAAADAB4AAAAHAEoAAAADAB8AAAAHAEsAAAADACAAAAAIAEYAAAAEABsAAAAIAEcAAAAEABwAAAAIAEgAAAAEAB0AAAAIAEkAAAAEAB4AAAAIAEoAAAAEAB8AAAAIAEsAAAAEACAAAAAJAEgAAAAFAB0AAAAJAEkAAAAFAB4AAAAJAEoAAAAFAB8AAAAJAEsAAAAFACAAAAAkADgAAAAmABYAAAAkADkAAAAmABcAAAAjADkAAAAlABcAAAA=")
+tile_set = SubResource("TileSet_dkqf1")
 
 [node name="moveisacima" type="TileMapLayer" parent="."]
 position = Vector2(-16, -111)
@@ -4860,32 +4895,6 @@ tile_set = SubResource("TileSet_l1fgm")
 position = Vector2(193.5, 295.5)
 rotation = -1.5693444
 shape = SubResource("CapsuleShape2D_rx0yy")
-
-[node name="DialogoInicial" type="Sprite2D" parent="."]
-position = Vector2(-413, -51)
-script = ExtResource("13_2ukx5")
-
-[node name="audio" type="AudioStreamPlayer2D" parent="DialogoInicial"]
-stream = ExtResource("14_syw5o")
-
-[node name="GradePlayer" type="StaticBody2D" parent="DialogoInicial"]
-position = Vector2(413, 51)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogoInicial/GradePlayer"]
-position = Vector2(-443, -85)
-shape = SubResource("SegmentShape2D_5ok1v")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="DialogoInicial/GradePlayer"]
-position = Vector2(-443, -69)
-shape = SubResource("SegmentShape2D_5ok1v")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="DialogoInicial/GradePlayer"]
-position = Vector2(-427, -100)
-shape = SubResource("SegmentShape2D_gg2qv")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="DialogoInicial/GradePlayer"]
-position = Vector2(-409, -97)
-shape = SubResource("SegmentShape2D_gg2qv")
 
 [node name="ChuvaEtrovoes" type="Sprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_5ok1v")
@@ -5029,7 +5038,70 @@ occluder = SubResource("OccluderPolygon2D_kctbb")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kctbb")
 
+[node name="GradePlayer" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GradePlayer"]
+position = Vector2(-443, -85)
+shape = SubResource("SegmentShape2D_5ok1v")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="GradePlayer"]
+position = Vector2(-443, -69)
+shape = SubResource("SegmentShape2D_5ok1v")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="GradePlayer"]
+position = Vector2(-427, -100)
+shape = SubResource("SegmentShape2D_gg2qv")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="GradePlayer"]
+position = Vector2(-409, -97)
+shape = SubResource("SegmentShape2D_gg2qv")
+
+[node name="DialogoInicial" type="Area2D" parent="."]
+position = Vector2(-416, -57)
+script = ExtResource("28_snhuh")
+
+[node name="DialogoInicial" type="Sprite2D" parent="DialogoInicial"]
+
+[node name="audio" type="AudioStreamPlayer2D" parent="DialogoInicial/DialogoInicial"]
+stream = ExtResource("14_syw5o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogoInicial"]
+shape = SubResource("CircleShape2D_3b0qf")
+
+[node name="Meteor" type="StaticBody2D" parent="."]
+position = Vector2(1805, 1694)
+
+[node name="Sprite2D" type="Sprite2D" parent="Meteor"]
+texture = ExtResource("29_snhuh")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Meteor"]
+modulate = Color(1.759715, 1.759715, 1.759715, 1)
+texture = SubResource("GradientTexture1D_rv1h5")
+emission_shape = 1
+emission_sphere_radius = 51.14
+direction = Vector2(0, -1)
+gravity = Vector2(0, -20)
+initial_velocity_max = 30.93
+orbit_velocity_min = -0.1
+orbit_velocity_max = -0.1
+damping_max = 62.887
+scale_amount_max = 1.3
+color_ramp = SubResource("Gradient_snhuh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Meteor"]
+position = Vector2(1.0000001, 1)
+rotation = -1.5667019
+shape = SubResource("CapsuleShape2D_snhuh")
+
+[node name="PointLight2D" type="PointLight2D" parent="Meteor"]
+position = Vector2(-1, 0)
+color = Color(0.99, 0.4851, 0.09900002, 1)
+texture = ExtResource("33_04nrs")
+texture_scale = 0.5
+
 [connection signal="area_entered" from="Ativar Player" to="Ativar Player" method="_on_area_entered"]
 [connection signal="body_entered" from="Vida" to="Vida" method="_on_body_entered"]
 [connection signal="body_entered" from="Bolo" to="Bolo" method="_on_body_entered"]
 [connection signal="body_exited" from="Bolo" to="Bolo" method="_on_body_exited"]
+[connection signal="body_entered" from="DialogoInicial" to="DialogoInicial" method="_on_body_entered"]
+[connection signal="body_exited" from="DialogoInicial" to="DialogoInicial" method="_on_body_exited"]
